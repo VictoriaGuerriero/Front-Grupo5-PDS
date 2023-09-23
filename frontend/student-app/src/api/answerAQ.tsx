@@ -36,6 +36,8 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
 
   const [questionOfTask, setQuestionOfTask] = useState<Question[]>([]);
 
+  const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
 
   useEffect(() => {
     fetch(ALTERNATIVE_ENDPOINT)
@@ -62,6 +64,32 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
     }, [currentQuestionIndex, questions, allAlternatives]);
 
 
+  const handleFinishTest = async (alternativeId: number, currentQuestion: number) => {
+    try {
+      const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/validate_a_answer/'+alternativeId+'/'+taskId+'/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          alternativeId: alternativeId,
+          questionId: currentQuestion,
+          taskId: taskId,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const message = data.message; // Mensaje de respuesta del servidor
+        setServerResponse(message);
+
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
 
     
 
@@ -96,8 +124,6 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
     } catch (error) {
       console.error('Fetch error:', error);
     }
-
-
 
     //siguiente pregunta
     handleNextQuestion();
