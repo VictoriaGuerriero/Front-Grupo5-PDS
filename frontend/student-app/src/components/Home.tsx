@@ -1,11 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import '../static/home.css';
 
 import CreateTask2 from '../api/CreateTask2';
+import GetNumeric from '../api/getNumeric';
 
-const STUDENT_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/students/';
-const TASK_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/tasks/';
+interface Question {
+  id: number;
+  question: string;
+  type_question: string;
+  type_subject: string;
+  difficulty: string;
+  hint: string;
+}
+
+const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/';
+const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/';
+const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/'
 
 function Home() {
   const { studentId } = useParams();
@@ -13,6 +24,7 @@ function Home() {
   const [allTasks, setAllTasks] = useState<any>(null);
   const [studentTask, setStudentTask] = useState<any>(null);
   const [buttonClicked, setButtonClicked] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   const handleCreateTask = () => {
     console.log("asdas");
@@ -48,9 +60,21 @@ function Home() {
       });
   }, []);
 
-  const handleGoNumeric = () => {
-    window.location.replace(`http://localhost:3000/${studentId}/answertask/${studentTask.id}`)
-};
+  const fetchQuestion = useCallback(() => {
+    fetch(QUESTIONS_ENDPOINT)
+    .then((response) => response.json())
+    .then(data => {
+        console.log("questions",data);
+        setQuestions(data)
+      })
+    .catch((err) => {
+        console.log(err.message)
+    })
+}, [])
+
+//   const handleGoNumeric = () => {
+//     window.location.replace(`http://localhost:3000/${studentId}/answertask/${studentTask.id}`)
+// };
 
 
 
@@ -84,9 +108,10 @@ function Home() {
             <div className="mb-2">{studentTask?.name}</div>
             <div className="mb-2">Type: {studentTask?.type_task}</div>
             <div className="flex justify-end">
-              <button onClick={handleGoNumeric} className="bg-blue-500 text-white px-4 py-2 rounded">
+              {/* <button onClick={handleGoNumeric} className="bg-blue-500 text-white px-4 py-2 rounded">
                 Start
-              </button>
+              </button> */}
+              {buttonClicked ? <GetNumeric studentId={studentId} taskId={studentTask.id}/> : <button onClick={handleCreateTask} className="bg-blue-500 text-white px-4 py-2 rounded">Empezar</button>}
             </div>
           </div>
         </div>

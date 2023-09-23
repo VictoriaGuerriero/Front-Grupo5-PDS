@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-const CREATE_USER_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/students/'
+const CREATE_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
 
 function Register() {
     const [email, setEmail] = useState('')

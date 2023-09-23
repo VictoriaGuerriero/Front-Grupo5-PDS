@@ -1,8 +1,8 @@
 import { easePoly } from 'd3';
 import React, { useEffect, useState, useCallback, useRef } from 'react'
 
-const TASK_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/tasks';
-const STUDENT_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/students';
+const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks';
+const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students';
 
 function CreateTask2(props: any) {    
     const [student, setStudent] = React.useState<any>(null);

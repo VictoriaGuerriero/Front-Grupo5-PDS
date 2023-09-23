@@ -53,9 +53,9 @@ interface AlternativeQuestion {
     alternatives: [];
 }
 
-const TASK_ENDPOINT =  'https://tsqrmn8j-8000.brs.devtunnels.ms/tasks/'
-const STUDENT_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/students/'
-const ALTERNATIVEQUESTION_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/alternativequestion/'
+const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
+const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
+const ALTERNATIVEQUESTION_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/alternativequestion/'
 
 
 function AnswerTask(){

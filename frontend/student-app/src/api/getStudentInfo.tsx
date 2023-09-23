@@ -15,7 +15,7 @@ interface Student {
     task_count: number;
 }
 
-const STUDENT_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/students/'
+const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
 
 function GetStudentInfo() {
   const [studentInfo, setStudentInfo] = useState<Student | undefined>();

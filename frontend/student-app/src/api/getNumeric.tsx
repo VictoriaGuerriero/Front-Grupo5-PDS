@@ -58,10 +58,10 @@ interface NumericQuestion {
     question: number;
 }
 
-const TASK_ENDPOINT =  'https://tsqrmn8j-8000.brs.devtunnels.ms/tasks/'
-const NUMERICQ_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/numericquestion/'
-const STUDENT_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/students/'
-const QUESTIONS_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/questions/'
+const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
+const NUMERICQ_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/numericquestion/'
+const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
+const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/'
 
 //
 
@@ -123,7 +123,7 @@ function GetNumeric(props: any) {
         .catch((err) => {
             console.log(err.message)
         })
-    }, [])
+    }, [questionId])
 
 
     useEffect(() => {
@@ -132,7 +132,7 @@ function GetNumeric(props: any) {
             setCurrentNumeric(numericQuestions[i]);
           }
         }
-      }, [numericQuestions]);
+      }, [numericQuestions, questionId]);
       
       useEffect(() => {
         if (currentNumeric) {

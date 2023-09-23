@@ -23,8 +23,8 @@ interface AnswerAQProps {
   studentId: number;
 }
 
-const ALTERNATIVE_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/alternative/'
-const QUESTIONS_ENDPOINT = 'https://tsqrmn8j-8000.brs.devtunnels.ms/questions/'
+const ALTERNATIVE_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/alternative/'
+const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/'
 
 function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
