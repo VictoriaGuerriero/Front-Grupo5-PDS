@@ -34,8 +34,6 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
   const [serverResponse, setServerResponse] = useState<string | null>(null);
   const [selectedAlternative, setSelectedAlternative] = useState<number | null>(null);
 
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
   const [questionOfTask, setQuestionOfTask] = useState<Question[]>([]);
 
 
@@ -64,12 +62,8 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
     }, [currentQuestionIndex, questions, allAlternatives]);
 
 
-  const showPopup = (message: string) => {
-      setPopupMessage(message);
-      setIsPopupVisible(true);
-  };
-    
 
+    
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -94,71 +88,61 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
       if (response.ok) {
         const data = await response.json();
         const message = data.message; // Mensaje de respuesta del servidor
-  
-        // Verificar si la respuesta es correcta o no y mostrar el mensaje en el popup
-        if (data.isCorrect) {
-          showPopup('Respuesta correcta');
-        } else {
-          showPopup('Respuesta incorrecta');
-        }
-      } else {
-        console.error('Error in response:', response.statusText);
-      }
+        setServerResponse(message);
 
+      } else {
+        throw new Error('Network response was not ok');
+      }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Fetch error:', error);
     }
 
-    // verificar si la respuesta es correcta o no
-   
+
+
     //siguiente pregunta
     handleNextQuestion();
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-2xl font-semibold mb-4">{currentQuestion?.question}</h1>
-      <ul>
-        {currentAlternatives.map((alternative) => (
-          <li key={alternative.id} className="mb-2">
-            <label className="flex items-center space-x-2">
-              <input
-                type="radio"
-                className="form-radio"
-                name="alternative"
-                value={alternative.id}
-                onChange={() => setSelectedAlternative(alternative.id)}
-              />
-              <span>{alternative.answer}</span>
-            </label>
-          </li>
-        ))}
-      </ul>
-      {currentQuestionIndex < questions.length - 1 && (
-        <>
-          <button
-            onClick={() => {
-              if (selectedAlternative !== null && selectedAlternative !== undefined && currentQuestion !== null) {
-                handleAnswerQuestion(selectedAlternative, currentQuestion?.id);
-              }
-            }}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Next Question
-          </button>
-  
-          {/* Popup */}
-          {isPopupVisible && (
-            <div className="popup">
-              <p>{popupMessage}</p>
-              <button onClick={() => setIsPopupVisible(false)}>Cerrar</button>
-            </div>
+    <div className="max-w-3xl mx-auto">
+      <div className="flex flex-col items-center justify h-screen " >
+        <h1 className="text-2xl font-semibold mt-10 mb-8">
+          {currentQuestion?.question}
+        </h1>
+        <ul style={{ textAlign: 'center', padding: 0, margin: 0 }}>
+          {currentAlternatives.map((alternative) => (
+            <li key={alternative.id} className="mb-4">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  className="form-radio"
+                  name="alternative"
+                  value={alternative.id}
+                  onChange={() => setSelectedAlternative(alternative.id)}
+                />
+                <span className="pl-4">{alternative.answer}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-2 flex justify-end w-full">
+          {currentQuestionIndex < questions.length - 1 && (
+            <button
+              onClick={() => {
+                if (selectedAlternative !== null && selectedAlternative !== undefined && currentQuestion !== null) {
+                  handleAnswerQuestion(selectedAlternative, currentQuestion?.id);
+                }
+              }}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Next Question
+            </button>
           )}
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
-  
 }
+
 
 export default AnswerAQ;

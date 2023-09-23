@@ -27,6 +27,7 @@ function App() {
           <Routes>
             <Route path='home/:studentId' Component={Home}/>
             {/*<Route path="/:studentId" Component={CreateTask} />*/}
+            <Route path='/:studentId/answerAQ/:taskId' Component={GetTask}/>
             <Route path="/:studentId/answertask/:taskId" Component={AnswerTask}/> 
             <Route path="/student/:studentId/getNumeric/:taskId" Component={GetNumeric} />
             {/* <Route path='/'></Route> */}
