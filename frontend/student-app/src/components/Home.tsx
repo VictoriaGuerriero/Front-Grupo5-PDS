@@ -91,6 +91,7 @@ function Home() {
           </div>
         ))}
       </ul> */}
+      {studentTask !== null && (
         <div key={studentTask?.id} className="mb-2">
           <div className="bg-white border border-gray-300 p-4 flex flex-col">
             <div className="mb-2">{studentTask?.name}</div>
@@ -100,8 +101,12 @@ function Home() {
             </div>
           </div>
         </div>
+      )
+}
+        
       </ul>
     </div>
+  
   );
 }
 

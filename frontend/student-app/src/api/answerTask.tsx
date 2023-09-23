@@ -158,7 +158,7 @@ function AnswerTask(){
                 <AnswerAQ questions={questions} taskId={taskIdToInt} studentId={studentIdToInt} />
             ))}
 
-            {(task && task.type_task === 'N' && (
+            {(task && task.type_task === 'N' && questions.length > 0 && (
                 <GetNumeric questions={questions} taskId={taskIdToInt} studentId={studentIdToInt} />
             ))}
           </ul>

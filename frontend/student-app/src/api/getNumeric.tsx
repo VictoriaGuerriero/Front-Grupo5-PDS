@@ -254,7 +254,7 @@ function GetNumeric(props: any) {
                         // Perform actions for an incorrect answer
                         console.log(data);
                         setIncorrectCount(incorrectCount + 1)
-                        window.location.replace('http://localhost:3000/finishnumeric/'+taskId)
+                        // window.location.replace('http://localhost:3000/finishnumeric/'+taskId)
                     }
                 })
                 .catch(error => {

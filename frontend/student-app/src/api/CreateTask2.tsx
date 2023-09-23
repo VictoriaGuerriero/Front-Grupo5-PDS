@@ -73,29 +73,30 @@ function CreateTask2(props: any) {
 
     useEffect(() => {
         if (!studentHasTask) {
-                console.log('no tiene tarea')
-                console.log(taskType, taskDiff)
-                fetch(`${TASK_ENDPOINT}/`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        name: 'Tarea para nivel ' + student?.level + ' de ' + student?.username,
-                        type_task: taskType,
-                        difficulty: "Easy",
-                        student: props.student_id
-                    }),
-                    headers: {
-                        'Content-type': 'application/json; charset=UTF-8',
-                    },
-                })
-                .then((response) => response.json())
-                .then(data => {
-                    setTask(data)
-                })
-                .catch((err) => {
-                    console.log(err.message)
-                })
-            }
-        }, [allTasks, props.student_id, taskType, taskDiff, studentHasTask, student?.level, student?.username])
+            console.log('no tiene tarea')
+            console.log(taskType, taskDiff)
+            fetch(`${TASK_ENDPOINT}/`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    name: 'Tarea para nivel ' + student?.level + ' de ' + student?.username,
+                    type_task: taskType,
+                    difficulty: taskDiff,
+                    student: props.student_id
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            .then((response) => response.json())
+            .then(data => {
+                setTask(data)
+            })
+            .catch((err) => {
+                console.log(err.message)
+            })
+        }
+    }, [studentHasTask, taskType, taskDiff, student?.level, student?.username, props.student_id])
+    
     
     return (
         <div>
@@ -105,69 +106,3 @@ function CreateTask2(props: any) {
 }
 
 export default CreateTask2;
-
-
-    // create a task if studen
-
-    // const createTask = () => {
-    //     fetch(`${TASK_ENDPOINT}/`, {
-    //         method: 'POST',
-    //         body: JSON.stringify({
-    //             name: 'Tarea para nivel ' + student?.level + ' de ' + student?.username,
-    //             type_task: taskType,
-    //             difficulty: taskDiff,
-    //             student: props.student_id
-    //         }),
-    //         headers: {
-    //             'Content-type': 'application/json; charset=UTF-8',
-    //         },
-    //     })
-    //     .then((response) => response.json())
-    //     .then(data => {
-    //         setTask(data)
-    //     })
-    //     .catch((err) => {
-    //         console.log(err.message)
-    //     })
-    // }
-
-    // useEffect(() => {
-    //     // fetchStudent();
-    //     fetch(`${TASK_ENDPOINT}/`)
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setTasks(data);
-    //             console.log(data)
-    //             if (data.length > 0) {
-    //                 data.forEach((el: any) => {
-    //                     console.log(el.student)
-    //                     if (Number(el.student) === Number(props.student_id)) {
-    //                         console.log('si tiene tarea')
-    //                     }
-    //                 });
-    //             } else {
-    //                 console.log('no tiene tarea')
-    //                 createTask();
-    //             }
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //         });
-    // }, []);
-
-    
-
-    // useEffect(() => {
-    //     if (allTasks !== null && student !== null) {
-    //       const task = allTasks.find((task: any) => task.student === student.id);
-          
-    //       if (task) {
-    //         console.log('El estudiante tiene una tarea específica:', task);
-    //       } else {
-    //         console.log('El estudiante no tiene una tarea específica.');
-    //         createTask();
-    //         // Puedes llamar aquí a la función para crear una tarea si no tiene una específica.
-    //       }
-    //     }
-    //   }, [allTasks, student]);
-      
