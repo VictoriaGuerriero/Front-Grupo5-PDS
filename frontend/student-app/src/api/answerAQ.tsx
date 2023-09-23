@@ -17,6 +17,12 @@ interface Alternative {
   is_correct: boolean;
 }
 
+interface AlternativeQuestion {
+  id: number;
+  alternative: [];
+  question: number;
+}
+
 interface AnswerAQProps {
   questions: Question[];
   taskId: number;
@@ -25,6 +31,8 @@ interface AnswerAQProps {
 
 const ALTERNATIVE_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/alternative/'
 const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/'
+const ALTERNATIVEQUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/alternativequestion/'
+const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
 
 function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -33,101 +41,161 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
   const [allAlternatives, setAllAlternatives] = useState<Alternative[]>([]);
   const [serverResponse, setServerResponse] = useState<string | null>(null);
   const [selectedAlternative, setSelectedAlternative] = useState<number | null>(null);
+  const [currentAlternativeQuestion, setCurrentAlternativeQuestion] = useState<AlternativeQuestion[]>([]);
 
   const [questionOfTask, setQuestionOfTask] = useState<Question[]>([]);
 
+  const [all_alternative_question, setAll_alternative_question] = useState<AlternativeQuestion[]>([]);
+
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
+  //console.log ("currentQuestionIndex", currentQuestionIndex)
+  //console.log(currentAlternatives)
 
-
-  useEffect(() => {
-    fetch(ALTERNATIVE_ENDPOINT)
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("alternatives", data);
-            setAllAlternatives(data);
-        })
-        .catch((err) => {
-            console.error(err.message);
-        });
-    }, []);
 
     useEffect(() => {
-        if (currentQuestionIndex >= 0 && currentQuestionIndex < questions.length) {
-          const question = questions[currentQuestionIndex];
-          setCurrentQuestion(question);
+      fetch(ALTERNATIVE_ENDPOINT)
+          .then((response) => response.json())
+          .then((data) => {
+              //console.log("alternatives", data);
+              setAllAlternatives(data);
+          })
+          .catch((err) => {
+              console.error(err.message);
+          });
+      }, []);
 
-          const filteredAlternatives = allAlternatives.filter(
-            (alternative) => alternative.alternative_question === question.id
-          );
-          setCurrentAlternatives(filteredAlternatives);
-        }
-    }, [currentQuestionIndex, questions, allAlternatives]);
+    useEffect(() => {
+      fetch(ALTERNATIVEQUESTIONS_ENDPOINT)
+          .then((response) => response.json())
+          .then((data) => {
+              //console.log("alternativequestion", data);
+              setAll_alternative_question(data);
+          })
+          .catch((err) => {
+              console.error(err.message);
+          });
+      }, []);
 
 
-  const handleFinishTest = async (alternativeId: number, currentQuestion: number) => {
-    try {
-      const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/validate_a_answer/'+alternativeId+'/'+taskId+'/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          alternativeId: alternativeId,
-          questionId: currentQuestion,
-          taskId: taskId,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const message = data.message; // Mensaje de respuesta del servidor
-        setServerResponse(message);
-
-      } else {
-        throw new Error('Network response was not ok');
+    useEffect(() => {
+      if (currentQuestionIndex >= 0 && currentQuestionIndex < questions.length) {
+        const question = questions[currentQuestionIndex];
+        setCurrentQuestion(question);
+    
+        const currentAlternativeQuestions = all_alternative_question.filter(
+          (alternative_question) => alternative_question.question === question.id
+        );
+    
+        setCurrentAlternativeQuestion(currentAlternativeQuestions);
+    
+        const filteredAlternatives = allAlternatives.filter((alternative) =>
+          currentAlternativeQuestions.some(
+            (alternative_question) => alternative_question.id === alternative.alternative_question
+          )
+        );
+    
+        setCurrentAlternatives(filteredAlternatives);
       }
-    } catch (error) {
-      console.error('Fetch error:', error);
-    }
-  };
-
+    }, [currentQuestionIndex, questions, allAlternatives, all_alternative_question]);
     
 
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
-  };
-
-  const handleAnswerQuestion = async (alternativeId: number, currentQuestion: number) => {
-    try {
-      const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/validate_a_answer/'+alternativeId+'/'+taskId+'/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          alternativeId: alternativeId,
-          questionId: currentQuestion,
-          taskId: taskId,
-        }),
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        const message = data.message; // Mensaje de respuesta del servidor
-        setServerResponse(message);
-
-      } else {
-        throw new Error('Network response was not ok');
+    const getTaskDetails = async (taskId: any) => {
+      try {
+        const response = await fetch(TASK_ENDPOINT + taskId+'/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          return data; // Debes devolver los detalles de la tarea desde el backend
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
       }
-    } catch (error) {
-      console.error('Fetch error:', error);
-    }
+    };
+    
 
-    //siguiente pregunta
-    handleNextQuestion();
+    const refirectionFinish = async (taskId: any) => {
+      const taskDetails = await getTaskDetails(taskId);
+      console.log(taskDetails)
+
+      if (taskDetails) {
+        window.location.href = '/student/'+studentId+'/nuevointento/'+taskId;
+      } else {
+        window.location.href = '/student/'+studentId+'/finishalternative/'+taskId;
+    };
   };
+
+
+    const handleFinishTest = async (alternativeId: number, currentQuestion: number) => {
+      try {
+        const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/validate_a_answer/'+alternativeId+'/'+taskId+'/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            alternativeId: alternativeId,
+            questionId: currentQuestion,
+            taskId: taskId,
+          }),
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          const message = data.message;
+          console.log(message)
+
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+
+    const handleNextQuestion = () => {
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
+    };
+
+    const handleAnswerQuestion = async (alternativeId: number, currentQuestion: number) => {
+      try {
+        const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/validate_a_answer/'+alternativeId+'/'+taskId+'/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            alternativeId: alternativeId,
+            questionId: currentQuestion,
+            taskId: taskId,
+          }),
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          const message = data.message;
+          console.log(message)
+          setServerResponse(message);
+
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+
+      handleNextQuestion();
+    };
+
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -152,18 +220,30 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
           ))}
         </ul>
         <div className="mt-2 flex justify-end w-full">
-          {currentQuestionIndex < questions.length - 1 && (
-            <button
-              onClick={() => {
-                if (selectedAlternative !== null && selectedAlternative !== undefined && currentQuestion !== null) {
-                  handleAnswerQuestion(selectedAlternative, currentQuestion?.id);
-                }
-              }}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Next Question
-            </button>
-          )}
+        {isLastQuestion ? (
+          <button
+            onClick={() => {
+              if (selectedAlternative !== null && selectedAlternative !== undefined && currentQuestion !== null) {
+                handleFinishTest(selectedAlternative, currentQuestion?.id);
+                refirectionFinish(taskId);
+              }
+            }}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Finalizar
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              if (selectedAlternative !== null && selectedAlternative !== undefined && currentQuestion !== null) {
+                handleAnswerQuestion(selectedAlternative, currentQuestion?.id);
+              }
+            }}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Siguiente
+          </button>
+        )}
         </div>
       </div>
     </div>

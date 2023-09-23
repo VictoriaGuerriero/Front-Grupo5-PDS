@@ -11,6 +11,9 @@ import Login from './api/Login'
 import GetNumeric from './api/getNumeric';
 import FinishNumeric from './api/finishNumeric';
 import AnswerTask from './api/answerTask';
+import FinishAlternative from './api/finishAlternative';
+import answerAQ_2 from './api/answerAQ_2';
+import nuevoIntento from './api/nuevoIntento';
 // import DrawDiagram from './api/drawCircuit'
 
 function App() {
@@ -28,10 +31,17 @@ function App() {
             <Route path='home/:studentId' Component={Home}/>
             {/*<Route path="/:studentId" Component={CreateTask} />*/}
             <Route path='/:studentId/answerAQ/:taskId' Component={GetTask}/>
-            <Route path="/:studentId/answertask/:taskId" Component={AnswerTask}/> 
             <Route path="/student/:studentId/getNumeric/:taskId" Component={GetNumeric} />
             {/* <Route path='/'></Route> */}
             <Route path="/student/:studentId/finishnumeric/:taskId" Component={FinishNumeric}/>
+
+            <Route path="/:studentId/answertask/:taskId" Component={AnswerTask}/> 
+            <Route path="/student/:studentId/answerAQ2/:taskId" Component={answerAQ_2}/>
+            <Route path="/student/:studentId/nuevointento/:taskId" Component={nuevoIntento}/>
+            <Route path="/student/:studentId/finishalternative/:taskId" Component={FinishAlternative}/>
+            
+            
+            
           </Routes>
           
         </Router>
