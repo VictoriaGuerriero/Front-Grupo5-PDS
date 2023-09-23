@@ -60,17 +60,16 @@ function Home() {
       });
   }, []);
 
-  const fetchQuestion = useCallback(() => {
-    fetch(QUESTIONS_ENDPOINT)
-    .then((response) => response.json())
-    .then(data => {
-        console.log("questions",data);
-        setQuestions(data)
-      })
-    .catch((err) => {
-        console.log(err.message)
-    })
-}, [])
+  useEffect(() => {
+    for (let i = 0; i < allTasks.length; i++) {
+      if (allTasks[i].id === Number(studentTask?.id)) {
+        setQuestions(allTasks[i].questions);
+      }
+    }
+  }, [allTasks, studentTask]);
+
+
+
 
 //   const handleGoNumeric = () => {
 //     window.location.replace(`http://localhost:3000/${studentId}/answertask/${studentTask.id}`)
@@ -111,7 +110,7 @@ function Home() {
               {/* <button onClick={handleGoNumeric} className="bg-blue-500 text-white px-4 py-2 rounded">
                 Start
               </button> */}
-              {buttonClicked ? <GetNumeric studentId={studentId} taskId={studentTask.id}/> : <button onClick={handleCreateTask} className="bg-blue-500 text-white px-4 py-2 rounded">Empezar</button>}
+              {buttonClicked ? <GetNumeric studentId={studentId} taskId={studentTask.id} questions={questions}/> : <button className="bg-blue-500 text-white px-4 py-2 rounded">Empezar</button>}
             </div>
           </div>
         </div>
