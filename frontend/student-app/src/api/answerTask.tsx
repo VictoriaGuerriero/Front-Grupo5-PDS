@@ -59,75 +59,93 @@ const ALTERNATIVEQUESTION_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero
 
 
 function AnswerTask(){
-    const [task, setTask] = useState<Task>();
-    const [questions, setQuestions] = useState<Question[]>([]);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-    const [student, setStudent] = useState<Student>();
-    const [alternatives, setAlternatives] = useState<Alternative[]>([]);
-    const [alternativeQuestion, setAlternativeQuestion] = useState<AlternativeQuestion[]>([]);
-    const {studentId} = useParams();
-    const {taskId} = useParams();
+    const [task, setTask] = useState<Task | null>(null);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [student, setStudent] = useState<Student | null>(null);
+  const [alternativeQuestion, setAlternativeQuestion] = useState<AlternativeQuestion[]>([]);
+  const { studentId } = useParams();
+  const { taskId } = useParams();
 
-    useEffect(() => {
-        fetch(TASK_ENDPOINT + `${taskId}/questions_to_task/?student_id=${studentId}`, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
+  // Fetch task and student data
+  useEffect(() => {
+    fetch(`${TASK_ENDPOINT}${taskId}/`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data)
+        setTask(data);
+      })
+      .catch((error) => {
+        console.error('Fetch error:', error);
+      });
+
+    fetch(STUDENT_ENDPOINT + studentId + '/', {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data)
+        setStudent(data);
+      })
+      .catch((error) => {
+        console.error('Fetch error:', error);
+      });
+  }, [studentId, taskId]);
+
+  // Fetch alternative questions data
+  useEffect(() => {
+    fetch(ALTERNATIVEQUESTION_ENDPOINT, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('alternative questions', data);
+        setAlternativeQuestion(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  }, []);
+
+  // Fetch questions data once task and student data are available
+  useEffect(() => {
+    if (task && student) {
+      fetch(TASK_ENDPOINT + `${taskId}/questions_to_task/?student_id=${studentId}`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Network response was not ok');
+          }
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json(); 
-            } else {
-                throw new Error('Network response was not ok');
-            }
+        .then((data) => {
+            console.log("dataaaa", data)
+            setQuestions(data.task.questions);
+            console.log("questions", data.task.questions);
         })
-        .then(data => {
-            console.log(data.message)
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
+        .catch((error) => {
+          console.error('Fetch error:', error);
         });
-    }, [taskId, studentId])
+    }
+  }, [studentId, taskId, task, student]);
 
-    useEffect(() => {
-        // Obtener todas las AlternativeQuestion sin importar la tarea
-        fetch(ALTERNATIVEQUESTION_ENDPOINT)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("alternative questions", data);
-            setAlternativeQuestion(data);
-          })
-          .catch((err) => {
-            console.error(err.message);
-          });
-        
-          fetch(TASK_ENDPOINT+taskId+'/')
-            .then((response) => response.json())
-            .then(data => {
-                setTask(data)
-                setQuestions(data.questions)
-                console.log("questions",questions)
-                console.log("task",task)
-            })
-            .catch((err) => {
-                console.log(err.message)
-            })
-
-        fetch(STUDENT_ENDPOINT+studentId+'/')
-            .then((response) => response.json())
-            .then(data => {
-                console.log(data);
-                setStudent(data)
-                })
-            .catch((err) => {
-                console.log(err.message)
-            })
-    }, [taskId, studentId])
-
-    
-    const taskIdToInt = parseInt(taskId!)
-    const studentIdToInt = parseInt(studentId!)
+  const taskIdToInt = parseInt(taskId!);
+  const studentIdToInt = parseInt(studentId!);
     return (
         <div>
             {/* <AnswerTask taskId={taskIdToInt}/> */}
@@ -136,11 +154,11 @@ function AnswerTask(){
             <h3>{task?.type_task}</h3>
             <h4>{task?.difficulty}</h4>
           <ul> 
-            {(task && task.type_task == 'AQ'  &&(
+            {(task && task.type_task === 'AQ'  &&(
                 <AnswerAQ questions={questions} taskId={taskIdToInt} studentId={studentIdToInt} />
             ))}
 
-            {(task && task.type_task == 'N' && (
+            {(task && task.type_task === 'N' && (
                 <GetNumeric questions={questions} taskId={taskIdToInt} studentId={studentIdToInt} />
             ))}
           </ul>

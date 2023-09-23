@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import '../static/home.css';
 
 import CreateTask2 from '../api/CreateTask2';
-import GetNumeric from '../api/getNumeric';
 
 interface Question {
   id: number;
@@ -16,7 +15,6 @@ interface Question {
 
 const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/';
 const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/';
-const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/'
 
 function Home() {
   const { studentId } = useParams();
@@ -60,20 +58,11 @@ function Home() {
       });
   }, []);
 
-  useEffect(() => {
-    for (let i = 0; i < allTasks.length; i++) {
-      if (allTasks[i].id === Number(studentTask?.id)) {
-        setQuestions(allTasks[i].questions);
-      }
-    }
-  }, [allTasks, studentTask]);
 
-
-
-
-//   const handleGoNumeric = () => {
-//     window.location.replace(`http://localhost:3000/${studentId}/answertask/${studentTask.id}`)
-// };
+  const handleGoAnswerTask = (taskId: any) => {
+    console.log("task id", taskId)
+    window.location.replace(`http://localhost:3000/${studentId}/answertask/${Number(taskId)}`)
+};
 
 
 
@@ -107,10 +96,7 @@ function Home() {
             <div className="mb-2">{studentTask?.name}</div>
             <div className="mb-2">Type: {studentTask?.type_task}</div>
             <div className="flex justify-end">
-              {/* <button onClick={handleGoNumeric} className="bg-blue-500 text-white px-4 py-2 rounded">
-                Start
-              </button> */}
-              {buttonClicked ? <GetNumeric studentId={studentId} taskId={studentTask.id} questions={questions}/> : <button className="bg-blue-500 text-white px-4 py-2 rounded">Empezar</button>}
+              <button onClick={() => handleGoAnswerTask(studentTask?.id)} className="bg-blue-500 text-white px-4 py-2 rounded">Empezar</button>
             </div>
           </div>
         </div>

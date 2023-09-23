@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Input, Button } from "@material-tailwind/react";
 
-import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
 import Serie2Resist from '../diagrams/serie2Resist';
 import Serie3Resist from '../diagrams/serie3Resist';
 import Serie4Resist from '../diagrams/serie4Resist';
@@ -66,10 +64,6 @@ const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.ap
 //
 
 function GetNumeric(props: any) {
-
-    // const {studentId} = useParams();
-    // const {taskId} = useParams();
-    // const {questionId} = useParams();
     const studentId = props.studentId
     const taskId = props.taskId
     const questions = props.questions
@@ -98,6 +92,10 @@ function GetNumeric(props: any) {
     //         console.log(err.message)
     //     })
     // }, [studentId])
+
+    console.log("student",studentId)
+    console.log("task",taskId)
+    console.log("questions", questions)
 
     
 
@@ -133,6 +131,8 @@ function GetNumeric(props: any) {
           }
         }
       }, [numericQuestions, questionId]);
+
+      console.log("answer", currentNumeric?.answer)
       
       useEffect(() => {
         if (currentNumeric) {
@@ -199,7 +199,7 @@ function GetNumeric(props: any) {
     const handleButtonClick = () => {
         if (answerString !== undefined){
             if (listAnswer.length === 0 && incorrectCount === 0){
-                fetch(QUESTIONS_ENDPOINT + 1 + '/validate_n_answer/' + studentAnswerNumber + '/' + taskId + '/', {
+                fetch(QUESTIONS_ENDPOINT + questionId + '/validate_n_answer/' + studentAnswerNumber + '/' + taskId + '/', {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json; charset=UTF-8',
@@ -216,7 +216,7 @@ function GetNumeric(props: any) {
                     if (data.message === 'Correct answer') {
                         // Perform actions for a correct answer
                         console.log('Correct Answer:', data.message);
-                        window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
+                        // window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
                        
                     } else {
                         // Perform actions for an incorrect answer
@@ -231,7 +231,7 @@ function GetNumeric(props: any) {
                 
             }
             else if (listAnswer.length === 0 && incorrectCount === 1) {
-                fetch(QUESTIONS_ENDPOINT + 1+ '/validate_n_2answer/' + studentAnswerNumber + '/' + 50 + '/', {
+                fetch(QUESTIONS_ENDPOINT + questionId + '/validate_n_2answer/' + studentAnswerNumber + '/' + taskId + '/', {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json; charset=UTF-8',

@@ -28,7 +28,7 @@ function App() {
             <Route path='home/:studentId' Component={Home}/>
             {/*<Route path="/:studentId" Component={CreateTask} />*/}
             <Route path="/:studentId/answertask/:taskId" Component={AnswerTask}/> 
-            <Route path="/student/:studentId/getNumeric/:taskId" Component={GetNumeric} />
+            {/* <Route path="/student/:studentId/getNumeric/:taskId" Component={GetNumeric} /> */}
             {/* <Route path='/'></Route> */}
             <Route path="/student/:studentId/finishnumeric/:taskId" Component={FinishNumeric}/>
           </Routes>

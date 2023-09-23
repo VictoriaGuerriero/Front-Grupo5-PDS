@@ -79,7 +79,7 @@ function CreateTask2(props: any) {
                     method: 'POST',
                     body: JSON.stringify({
                         name: 'Tarea para nivel ' + student?.level + ' de ' + student?.username,
-                        type_task: "AQ",
+                        type_task: taskType,
                         difficulty: "Easy",
                         student: props.student_id
                     }),
@@ -95,7 +95,7 @@ function CreateTask2(props: any) {
                     console.log(err.message)
                 })
             }
-        }, [allTasks, props.student_id, taskType, taskDiff])
+        }, [allTasks, props.student_id, taskType, taskDiff, studentHasTask, student?.level, student?.username])
     
     return (
         <div>
