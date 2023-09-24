@@ -96,6 +96,31 @@ function CreateTask2(props: any) {
             })
         }
     }, [studentHasTask, taskType, taskDiff, student?.level, student?.username, props.student_id])
+
+      // Fetch questions data once task and student data are available
+  useEffect(() => {
+    if (task && student) {
+      fetch(TASK_ENDPOINT + `${task.id}/questions_to_task/?student_id=${student.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        })
+        .then((data) => {
+            console.log("dataaaa", data)
+        })
+        .catch((error) => {
+          console.error('Fetch error:', error);
+        });
+    }
+  }, [task, student]);
     
     
     return (

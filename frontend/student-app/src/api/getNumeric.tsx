@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Input, Button } from "@material-tailwind/react";
+import Swal from 'sweetalert2';
 
 import Serie2Resist from '../diagrams/serie2Resist';
 import Serie3Resist from '../diagrams/serie3Resist';
@@ -194,6 +195,28 @@ function GetNumeric(props: any) {
     const answerString = currentNumeric?.answer;
     const variable1Number = parseFloat(variable1);
     const variable2Number = parseFloat(variable2);
+
+    const renderButtons = () => {
+        if (incorrectCount !== 2) { // Replace 'shouldHideButtons' with your actual condition
+          return (
+            <div className="flex items-center justify-between">
+              <Button className="bg-blue-500 text-white px-4 py-2 rounded mt-2" key ='enviar' onClick={handleButtonClick}>
+                Enviar
+              </Button>
+              <Button className="bg-gray-500 text-white px-4 py-2 rounded mt-2" key='saltar' onClick={handleSaltarClick}>
+                Saltar
+              </Button>
+            </div>
+          );
+        }
+        else{
+            return (<div className="flex items-center justify-between">
+              <Button className="bg-blue-500 text-white px-4 py-2 rounded mt-2" key ='enviar' onClick={handleTerminarClick}>
+                Terminar
+              </Button>
+            </div>)
+        }
+      };
     
 
     const handleButtonClick = () => {
@@ -216,7 +239,7 @@ function GetNumeric(props: any) {
                     if (data.message === 'Correct answer') {
                         // Perform actions for a correct answer
                         console.log('Correct Answer:', data.message);
-                        // window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
+                        window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
                        
                     } else {
                         // Perform actions for an incorrect answer
@@ -248,13 +271,13 @@ function GetNumeric(props: any) {
                     if (data.message === 'Correct answer') {
                         // Perform actions for a correct answer
                         console.log(data);
-                        window.location.replace('http://localhost:3000/finishnumeric/'+taskId)
+                        window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
                        
                     } else {
                         // Perform actions for an incorrect answer
                         console.log(data);
                         setIncorrectCount(incorrectCount + 1)
-                        // window.location.replace('http://localhost:3000/finishnumeric/'+taskId)
+                        showPopup(`Respuesta Incorrecta.`)
                     }
                 })
                 .catch(error => {
@@ -277,6 +300,39 @@ function GetNumeric(props: any) {
         }
     };
 
+    const handleSaltarClick = () => {
+        Swal.fire({
+            title: '¿Estás Seguro?',
+            icon: 'question',
+            html:
+              '¿Quieres saltarte la tarea?',
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText:
+              'Si, saltar',
+            confirmButtonAriaLabel: 'Thumbs up, great!',
+            cancelButtonText:
+              'No',
+            cancelButtonAriaLabel: 'Thumbs down'
+          }).then((result) => {
+            if (result.value) {
+                fetch(TASK_ENDPOINT + `${taskId}/pass_task`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                })
+                window.location.replace('http://localhost:3000/home/'+studentId)
+                
+            }
+          })
+    };
+
+    const handleTerminarClick = () => {
+        window.location.replace('http://localhost:3000/finishnumeric/'+taskId)
+    }
+
     // useEffect(() => {
     //     if (incorrectCount === 1) {
     //       showPopup(`Respuesta incorrecta. Tienes un intento más. Hint: `); // Show the popup
@@ -286,8 +342,8 @@ function GetNumeric(props: any) {
 
     //   console.log("asjklfklfjklsdfjlk",combination,"asjklfklfjklsdfjlk")
     return (
-        <div>
-            <div>{question?.question}</div>
+        <div className="bg-lightPink-50 p-4 text-black rounded-md">
+            <div className="text-l">{question?.question}</div>
             {circuitType === '0' && numRes === '2' && (
                 <Serie2Resist volt={volt} r1={combination[3]} r2={combination[4]} />
             )}
@@ -318,46 +374,80 @@ function GetNumeric(props: any) {
             )}
             
 
+            {/* Input fields */}
             {listAnswer.length > 0 ? (
-                <div className="relative flex w-full max-w-[24rem]">
-                <Input
-                  key='var1'
-                  color="indigo"
-                  label="Variable 1"
-                  crossOrigin={undefined}
-                  value={variable1}
-                  onChange={handleVariable1Change}
-                />
-                <Input
-                  key='var2'
-                  color="indigo"
-                  label="Variable 2"
-                  crossOrigin={undefined}
-                  value={variable2}
-                  onChange={handleVariable2Change}
-                />
-              </div>
+                <div className="relative flex w-full max-w-[24rem] space-x-2">
+                <div className="flex-grow relative">
+                    <label className="absolute top-2 left-2 text-xs text-gray-400">Variable 1</label>
+                    <Input
+                    key='var1'
+                    color="indigo"
+                    crossOrigin={undefined}
+                    value={variable1}
+                    onChange={handleVariable1Change}
+                    className="rounded-md px-2 py-1 w-1/3"
+                    />
+                </div>
+                <div className="flex-grow relative">
+                    <label className="absolute top-2 left-2 text-xs text-gray-400">Variable 2</label>
+                    <Input
+                    key='var2'
+                    color="indigo"
+                    crossOrigin={undefined}
+                    value={variable2}
+                    onChange={handleVariable2Change}
+                    className="rounded-md px-2 py-1 w-1/3"
+                    />
+                </div>
+                </div>
             ) : (
-              <div className="relative flex w-full max-w-[24rem]">
-                <Input
-                  key='resp'
-                  color="indigo"
-                  label="Respuesta"
-                  crossOrigin={undefined}
-                  value={studentAnswer}
-                  onChange={(e) => setStudentAnswer(e.target.value)}
-                />
-              </div>
+                <div className="relative flex w-full max-w-[24rem]">
+                <div className="flex-grow relative">
+                    <label className="absolute top-2 left-2 text-xs text-gray-400" htmlFor="resp">Respuesta</label>
+                    <Input
+                    key='resp'
+                    color="indigo"
+                    crossOrigin={undefined}
+                    value={studentAnswer}
+                    onChange={(e) => setStudentAnswer(e.target.value)}
+                    className="rounded-md px-2 py-1 w-1/3"
+                    />
+                </div>
+                </div>
             )}
-            <Button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleButtonClick}>Enviar</Button>
+            
+            {/* Button */}
+            {/* <div className="flex items-center justify-between">
+                <Button className="bg-blue-500 text-white px-4 py-2 rounded mt-2" key ='enviar' onClick={handleButtonClick}>
+                    Enviar
+                </Button>
+                <Button className="bg-gray-500 text-white px-4 py-2 rounded mt-2" key='saltar' onClick={handleSaltarClick}>
+                    Saltar
+                </Button>
+            </div> */}
+            {renderButtons()}
 
             {/* Popup */}
             {isPopupVisible && (
-                <div className="popup bg-orange-500">
-                <p className="text-white">{popupMessage}</p>
-                <button onClick={() => setIsPopupVisible(false)}>Cerrar</button>
+                <div className="popup bg-orange-500 text-white p-4 rounded mt-2 relative">
+                    <p className="text-white">{popupMessage}</p>
+                    <button
+                    className="absolute top-0 right-0 mt-2 mr-2"
+                    onClick={() => setIsPopupVisible(false)}
+                    >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    </button>
                 </div>
-            )}
+                )}
     
         </div>
         

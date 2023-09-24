@@ -78,6 +78,7 @@ function AnswerTask(){
       .then((data) => {
         console.log(data)
         setTask(data);
+        setQuestions(data.questions);
       })
       .catch((error) => {
         console.error('Fetch error:', error);
@@ -117,53 +118,43 @@ function AnswerTask(){
       });
   }, []);
 
-  // Fetch questions data once task and student data are available
-  useEffect(() => {
-    if (task && student) {
-      fetch(TASK_ENDPOINT + `${taskId}/questions_to_task/?student_id=${studentId}`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Network response was not ok');
-          }
-        })
-        .then((data) => {
-            console.log("dataaaa", data)
-            setQuestions(data.task.questions);
-            console.log("questions", data.task.questions);
-        })
-        .catch((error) => {
-          console.error('Fetch error:', error);
-        });
-    }
-  }, [studentId, taskId, task, student]);
-
   const taskIdToInt = parseInt(taskId!);
   const studentIdToInt = parseInt(studentId!);
     return (
-        <div>
-            {/* <AnswerTask taskId={taskIdToInt}/> */}
-          <h1>{task?.description}</h1>
-            <h2>{task?.name}</h2>
-            <h3>{task?.type_task}</h3>
-            <h4>{task?.difficulty}</h4>
-          <ul> 
-            {(task && task.type_task === 'AQ'  &&(
-                <AnswerAQ questions={questions} taskId={taskIdToInt} studentId={studentIdToInt} />
-            ))}
+      <div >
+      <nav className="bg-darkBlue-500 p-4 mb-4 sticky top-0 z-10">
+        {/* Navbar-like styling */}
+        <h1 className="text-2xl text-white">{task?.description}</h1>
+        <h2 className="text-xl text-white">{task?.name}</h2>
+        {task && task.type_task === 'AQ' ? ( 
+         <h5 className="text-lg text-white">{'Alternativas'}</h5>
+         ): (
+          <h5 className="text-lg text-white">{'Numerico'}</h5>
+         )}
+        {task ? (
+            <h6 className="text-lg text-white">
+              {task.difficulty === 'Easy' ? 'Fácil' : task.difficulty === 'Intermediant' ? 'Intermedio' : 'Difícil'}
+            </h6>
+          ) : null}
+      </nav>
+      <div style={{
+        borderRadius: '10px',
+        padding: '20px',
+        margin: '20px', // Add margin to create space
+      }}>
+        <ul>
+          {(task && task.type_task === 'AQ' && (
+            <AnswerAQ questions={questions} taskId={taskIdToInt} studentId={studentIdToInt} />
+          ))}
 
-            {(task && task.type_task === 'N' && questions.length > 0 && (
-                <GetNumeric questions={questions} taskId={taskIdToInt} studentId={studentIdToInt} />
-            ))}
-          </ul>
-        </div>
-      );
+          {(task && task.type_task === 'N' && questions.length > 0 && (
+            <GetNumeric questions={questions} taskId={taskIdToInt} studentId={studentIdToInt} />
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+  
 }
 
 export default AnswerTask;
