@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-const CREATE_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
+const CREATE_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/register/'
 
 function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
+    const [error, setError] = useState(''); // Nuevo estado para manejar errores
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
 
-    const handleSubmit = (event: any) => {
+
+    const handleSubmit = (event : any) => {
         event.preventDefault();
         const formData = {
             username: event.target.username.value,
@@ -16,12 +19,12 @@ function Register() {
             password: event.target.password.value,
             password2: event.target.password2.value,
         };
-        
+
         // Limpia los estados de email, password y username
         setEmail('');
         setPassword('');
         setUsername('');
-
+        
         // Envía los datos al backend
         fetch(CREATE_USER_ENDPOINT, {
             method: 'POST',
@@ -32,36 +35,58 @@ function Register() {
         })
         .then((response) => {
             if (response.ok) {
-                setRegistrationSuccess(true); // Cambia el estado a éxito
+                setRegistrationSuccess(true); 
+                setError(''); 
+                setShowPopup(true)
                 return response.json();
             } else {
-                setRegistrationSuccess(false); // Cambia el estado a fallo
-                throw new Error('Registration failed');
+                setRegistrationSuccess(false); 
+                return response.json();
             }
         })
         .then((data) => {
-            console.log("User created successfully", data);
+            setError(data.message)
+            setShowPopup(true); 
         })
         .catch((err) => {
-            console.log(err.message)
+            setShowPopup(true);
+            console.log(err.message);
         });
     }
 
     const handleClick = () => {
-        window.location.replace('http://localhost:3000/login'); // Redirige a la página de inicio de sesión
+
+        if (registrationSuccess) {
+            console.log("·asdas")
+            window.location.replace('http://localhost:3000/login'); // Redirige a la página de inicio de sesión solo si el registro fue exitoso
+        } 
     }
 
+    const goToRegister = () => {
+        window.location.replace('http://localhost:3000/register');
+    }
+
+    const closePopup = () => {
+        setShowPopup(false);
+    }
+    
+
     return (
-        
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                {registrationSuccess ? ( // Muestra el mensaje de éxito si registrationSuccess es true
-                    <div className="bg-green-200 border border-green-600 text-green-900 px-4 py-3 rounded relative mb-4" role="alert">
-                        <strong className="font-bold">Success!</strong> Account created successfully. You can now <button onClick={handleClick} className="underline">login</button>.
+                {showPopup && (registrationSuccess || error) && (
+                    <div className={`bg-${registrationSuccess ? 'green' : 'red'}-200 border border-${registrationSuccess ? 'green' : 'red'}-600 text-${registrationSuccess ? 'green' : 'red'}-900 px-4 py-3 rounded relative mb-4`} role="alert">
+                        <button onClick={closePopup} className="absolute top-0 right-0 mt-2 mr-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 text-${registrationSuccess ? 'green' : 'red'}-900`} viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M14.293 5.293a1 1 0 0 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 1 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 1 1-1.414-1.414L8.586 10 4.293 5.707a1 1 0 1 1 1.414-1.414L10 8.586l4.293-4.293z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        <strong className="font-bold">{registrationSuccess ? 'Success!' : 'Error:'}</strong> {registrationSuccess ? 'Account created successfully.' : error}
                     </div>
-                ) : null}
-                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create an account</h2>
+                )}
+                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900" onClick={goToRegister} >Create an account </h2>
             </div>
+
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form className="space-y-6" onSubmit={handleSubmit}>
@@ -97,6 +122,10 @@ function Register() {
                         <button onClick={handleClick} type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
                     </div>
                 </form>
+                <p className="mt-10 text-center text-sm text-gray-500">
+                You already have an acount?
+                <a href="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" > Log In</a> {/*onClick={hanldeIsLogin}*/}
+                </p>
             </div>
         </div>
     )
