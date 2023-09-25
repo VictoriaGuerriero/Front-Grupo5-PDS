@@ -317,7 +317,7 @@ function GetNumeric(props: any) {
             cancelButtonAriaLabel: 'Thumbs down'
           }).then((result) => {
             if (result.value) {
-                fetch(TASK_ENDPOINT + `${taskId}/pass_task/`, {
+                fetch(TASK_ENDPOINT + `${taskId}/pass_task/?student_id=${studentId}`, {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json; charset=UTF-8',
