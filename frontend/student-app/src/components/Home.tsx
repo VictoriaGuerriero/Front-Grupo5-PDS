@@ -76,21 +76,7 @@ function Home() {
       </div>
       <div className="text-lg">Task Disponibles:</div>
       <ul className="list-disc pl-8 mt-2 task-list-home">
-      {/* <ul className="list-disc pl-8 mt-2 task-list-home">
-        {studentTask.map((task: any) => (
-          <div key={task.id} className="mb-2">
-            <div className="bg-white border border-gray-300 p-4 flex flex-col">
-              <div className="mb-2">{task.name}</div>
-              <div className="mb-2">Type: {task.type_task}</div>
-              <div className="flex justify-end">
-                <button className="bg-blue-500 text-white px-4 py-2 rounded">
-                  Start
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </ul> */}
+
       {studentTask !== null && (
         <div key={studentTask?.id} className="mb-2">
           <div className="bg-white border border-gray-300 p-4 flex flex-col">

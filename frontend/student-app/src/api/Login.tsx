@@ -1,28 +1,46 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+
+const LOGIN_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/login/'
 
 function Login() {
-    // const [email, setEmail] = React.useState('');
-    // const [password, setPassword] = React.useState('');
-    // const [isLogin, setIsLogin] = React.useState(true);
-
-    // const handleEmail = (e: any) => {
-    //     setEmail(e.target.value);
-    // }
-
-    // const handlePassword = (e: any) => {
-    //     setPassword(e.target.value);
-    // }
-
-    // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     if (email === '') {alert('Please enter email and password');}
-
-    //     // TODO: Add login logic
-    // }
-
-    // const hanldeIsLogin = () => {
-    //     setIsLogin(false);
-    // }
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+  
+    const handleEmailChange = (event: any) => {
+      setEmail(event.target.value);
+    }
+  
+    const handlePasswordChange = (event: any) => {
+      setPassword(event.target.value);
+    }
+  
+    const handleSubmit = async (event: any) => {
+      event.preventDefault();
+  
+      try {
+        const response = await fetch(LOGIN_USER_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        });
+  
+        if (response.ok) {
+          // El inicio de sesión fue exitoso, redirige al usuario a la página de inicio o realiza alguna acción necesaria.
+          // Por ejemplo, puedes redirigir al usuario a la página de inicio.
+          window.location.href = '/home';
+        } else {
+          
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    }
 
     return (
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -50,7 +68,7 @@ function Login() {
                     <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
                 </div>
                 </form>
-{/* sdsd */}
+
                 <p className="mt-10 text-center text-sm text-gray-500">
                 Not a member?
                 <a href="/register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" > Create an account </a> {/*onClick={hanldeIsLogin}*/}
