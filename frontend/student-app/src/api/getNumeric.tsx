@@ -317,7 +317,7 @@ function GetNumeric(props: any) {
             cancelButtonAriaLabel: 'Thumbs down'
           }).then((result) => {
             if (result.value) {
-                fetch(TASK_ENDPOINT + `${taskId}/pass_task`, {
+                fetch(TASK_ENDPOINT + `${taskId}/pass_task/`, {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json; charset=UTF-8',
@@ -330,7 +330,7 @@ function GetNumeric(props: any) {
     };
 
     const handleTerminarClick = () => {
-        window.location.replace('http://localhost:3000/finishnumeric/'+taskId)
+        window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
     }
 
     // useEffect(() => {
