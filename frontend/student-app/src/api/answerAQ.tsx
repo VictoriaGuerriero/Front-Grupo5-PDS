@@ -51,7 +51,6 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
   //console.log ("currentQuestionIndex", currentQuestionIndex)
   //console.log(currentAlternatives)
 
-
     useEffect(() => {
       fetch(ALTERNATIVE_ENDPOINT)
           .then((response) => response.json())
@@ -110,7 +109,7 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
     
         if (response.ok) {
           const data = await response.json();
-          return data; // Debes devolver los detalles de la tarea desde el backend
+          return data.wrong_answer; // Debes devolver los detalles de la tarea desde el backend
         } else {
           throw new Error('Network response was not ok');
         }
@@ -120,12 +119,11 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
       }
     };
     
-
     const refirectionFinish = async (taskId: any) => {
-      const taskDetails = await getTaskDetails(taskId);
-      console.log(taskDetails)
+      const wrong_answer_list = await getTaskDetails(taskId);
+      console.log(wrong_answer_list)
 
-      if (taskDetails) {
+      if (wrong_answer_list.length > 0) {
         window.location.href = '/student/'+studentId+'/nuevointento/'+taskId;
       } else {
         window.location.href = '/student/'+studentId+'/finishalternative/'+taskId;

@@ -125,6 +125,8 @@ function AnswerTask(){
             })
     }, [taskId, studentId])
 
+    console.log(questions)
+
     
     const taskIdToInt = parseInt(taskId!)
     const studentIdToInt = parseInt(studentId!)
