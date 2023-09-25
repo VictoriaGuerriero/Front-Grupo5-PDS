@@ -32,8 +32,13 @@ function App() {
             <Route path='/register' Component={Register}/>
             <Route path='/login' Component={Login}/>
             {/*<Route path="/:studentId" Component={CreateTask} />*/}
+
             <Route path='/:studentId/answerAQ/:taskId' Component={GetTask}/>
             <Route path="/student/:studentId/getNumeric/:taskId" Component={GetNumeric} />
+
+            <Route path="/:studentId/answertask/:taskId" Component={AnswerTask}/> 
+            {/* <Route path="/student/:studentId/getNumeric/:taskId" Component={GetNumeric} /> */}
+
             {/* <Route path='/'></Route> */}
             <Route path="/student/:studentId/finishnumeric/:taskId" Component={FinishNumeric}/>
 
