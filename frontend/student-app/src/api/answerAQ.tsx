@@ -166,7 +166,7 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
 
     const handleAnswerQuestion = async (alternativeId: number, currentQuestion: number) => {
       try {
-        const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/validate_a_answer/'+alternativeId+'/'+taskId+'/', {
+        const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/f/'+alternativeId+'/'+taskId+'/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

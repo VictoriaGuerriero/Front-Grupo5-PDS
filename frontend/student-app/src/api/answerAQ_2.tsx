@@ -9,6 +9,7 @@ interface Task {
   interface Question {
     id: number;
     question: string;
+    hint: string;
   }
   
   interface Alternative {
@@ -224,10 +225,11 @@ function AnswerAQ_2() {
           <h1 className="text-2xl font-semibold mt-10 mb-8">
             {currentQuestion?.question}
           </h1>
+          <h3 className='mb-8'>HINT: {currentQuestion?.hint}</h3>
           <ul style={{ textAlign: 'center', padding: 0, margin: 0 }}>
             {currentAlternatives.map((alternative) => (
               <li key={alternative.id} className="mb-4">
-                <label className="flex items-center space-x-2">
+                <label className="flex itcurrentQuestionems-center space-x-2">
                   <input
                     type="radio"
                     className="form-radio"

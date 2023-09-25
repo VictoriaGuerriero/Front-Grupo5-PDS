@@ -29,6 +29,8 @@ function App() {
           {/* <Circuit/> */}
           <Routes>
             <Route path='home/:studentId' Component={Home}/>
+            <Route path='/register' Component={Register}/>
+            <Route path='/login' Component={Login}/>
             {/*<Route path="/:studentId" Component={CreateTask} />*/}
             <Route path='/:studentId/answerAQ/:taskId' Component={GetTask}/>
             <Route path="/student/:studentId/getNumeric/:taskId" Component={GetNumeric} />
