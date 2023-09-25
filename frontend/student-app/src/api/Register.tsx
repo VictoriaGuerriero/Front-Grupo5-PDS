@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 const CREATE_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
 
 function Register() {
@@ -51,6 +52,7 @@ function Register() {
     }
 
     return (
+        
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 {registrationSuccess ? ( // Muestra el mensaje de éxito si registrationSuccess es true
