@@ -118,8 +118,11 @@ function AnswerTask(){
       });
   }, []);
 
+
+
   const taskIdToInt = parseInt(taskId!);
   const studentIdToInt = parseInt(studentId!);
+
     return (
       <div >
       <nav className="bg-darkBlue-500 p-4 mb-4 sticky top-0 z-10">

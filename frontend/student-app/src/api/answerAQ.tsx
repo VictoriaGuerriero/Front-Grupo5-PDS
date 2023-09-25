@@ -17,6 +17,12 @@ interface Alternative {
   is_correct: boolean;
 }
 
+interface AlternativeQuestion {
+  id: number;
+  alternative: [];
+  question: number;
+}
+
 interface AnswerAQProps {
   questions: Question[];
   taskId: number;
@@ -25,6 +31,8 @@ interface AnswerAQProps {
 
 const ALTERNATIVE_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/alternative/'
 const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/'
+const ALTERNATIVEQUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/alternativequestion/'
+const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
 
 function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -33,132 +41,212 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
   const [allAlternatives, setAllAlternatives] = useState<Alternative[]>([]);
   const [serverResponse, setServerResponse] = useState<string | null>(null);
   const [selectedAlternative, setSelectedAlternative] = useState<number | null>(null);
+  const [currentAlternativeQuestion, setCurrentAlternativeQuestion] = useState<AlternativeQuestion[]>([]);
 
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
   const [questionOfTask, setQuestionOfTask] = useState<Question[]>([]);
 
+  const [all_alternative_question, setAll_alternative_question] = useState<AlternativeQuestion[]>([]);
 
-  useEffect(() => {
-    fetch(ALTERNATIVE_ENDPOINT)
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("alternatives", data);
-            setAllAlternatives(data);
-        })
-        .catch((err) => {
-            console.error(err.message);
-        });
-    }, []);
+  const isLastQuestion = currentQuestionIndex === questions.length - 1;
+  //console.log ("currentQuestionIndex", currentQuestionIndex)
+  //console.log(currentAlternatives)
 
     useEffect(() => {
-        if (currentQuestionIndex >= 0 && currentQuestionIndex < questions.length) {
-          const question = questions[currentQuestionIndex];
-          setCurrentQuestion(question);
+      fetch(ALTERNATIVE_ENDPOINT)
+          .then((response) => response.json())
+          .then((data) => {
+              //console.log("alternatives", data);
+              setAllAlternatives(data);
+          })
+          .catch((err) => {
+              console.error(err.message);
+          });
+      }, []);
 
-          const filteredAlternatives = allAlternatives.filter(
-            (alternative) => alternative.alternative_question === question.id
-          );
-          setCurrentAlternatives(filteredAlternatives);
-        }
-    }, [currentQuestionIndex, questions, allAlternatives]);
+    useEffect(() => {
+      fetch(ALTERNATIVEQUESTIONS_ENDPOINT)
+          .then((response) => response.json())
+          .then((data) => {
+              //console.log("alternativequestion", data);
+              setAll_alternative_question(data);
+          })
+          .catch((err) => {
+              console.error(err.message);
+          });
+      }, []);
 
 
-  const showPopup = (message: string) => {
-      setPopupMessage(message);
-      setIsPopupVisible(true);
-  };
+    useEffect(() => {
+      if (currentQuestionIndex >= 0 && currentQuestionIndex < questions.length) {
+        const question = questions[currentQuestionIndex];
+        setCurrentQuestion(question);
+    
+        const currentAlternativeQuestions = all_alternative_question.filter(
+          (alternative_question) => alternative_question.question === question.id
+        );
+    
+        setCurrentAlternativeQuestion(currentAlternativeQuestions);
+    
+        const filteredAlternatives = allAlternatives.filter((alternative) =>
+          currentAlternativeQuestions.some(
+            (alternative_question) => alternative_question.id === alternative.alternative_question
+          )
+        );
+    
+        setCurrentAlternatives(filteredAlternatives);
+      }
+    }, [currentQuestionIndex, questions, allAlternatives, all_alternative_question]);
     
 
+    const getTaskDetails = async (taskId: any) => {
+      try {
+        const response = await fetch(TASK_ENDPOINT + taskId+'/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          return data.wrong_answer; // Debes devolver los detalles de la tarea desde el backend
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
+      }
+    };
+    
+    const refirectionFinish = async (taskId: any) => {
+      const wrong_answer_list = await getTaskDetails(taskId);
+      console.log(wrong_answer_list)
 
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
+      if (wrong_answer_list.length > 0) {
+        window.location.href = '/student/'+studentId+'/nuevointento/'+taskId;
+      } else {
+        window.location.href = '/student/'+studentId+'/finishalternative/'+taskId;
+    };
   };
 
-  const handleAnswerQuestion = async (alternativeId: number, currentQuestion: number) => {
-    try {
-      const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/validate_a_answer/'+alternativeId+'/'+taskId+'/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          alternativeId: alternativeId,
-          questionId: currentQuestion,
-          taskId: taskId,
-        }),
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        const message = data.message; // Mensaje de respuesta del servidor
-  
-        // Verificar si la respuesta es correcta o no y mostrar el mensaje en el popup
-        if (data.isCorrect) {
-          showPopup('Respuesta correcta');
+
+    const handleFinishTest = async (alternativeId: number, currentQuestion: number) => {
+      try {
+        const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/validate_a_answer/'+alternativeId+'/'+taskId+'/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            alternativeId: alternativeId,
+            questionId: currentQuestion,
+            taskId: taskId,
+          }),
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          const message = data.message;
+          console.log(message)
+
         } else {
-          showPopup('Respuesta incorrecta');
+          throw new Error('Network response was not ok');
         }
-      } else {
-        console.error('Error in response:', response.statusText);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+
+    const handleNextQuestion = () => {
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
+    };
+
+    const handleAnswerQuestion = async (alternativeId: number, currentQuestion: number) => {
+      try {
+        const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/f/'+alternativeId+'/'+taskId+'/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            alternativeId: alternativeId,
+            questionId: currentQuestion,
+            taskId: taskId,
+          }),
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          const message = data.message;
+          console.log(message)
+          setServerResponse(message);
+
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
       }
 
-    } catch (error) {
-      console.error('Error:', error);
-    }
+      handleNextQuestion();
+    };
 
-    // verificar si la respuesta es correcta o no
-   
-    //siguiente pregunta
-    handleNextQuestion();
-  };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-2xl font-semibold mb-4">{currentQuestion?.question}</h1>
-      <ul>
-        {currentAlternatives.map((alternative) => (
-          <li key={alternative.id} className="mb-2">
-            <label className="flex items-center space-x-2">
-              <input
-                type="radio"
-                className="form-radio"
-                name="alternative"
-                value={alternative.id}
-                onChange={() => setSelectedAlternative(alternative.id)}
-              />
-              <span>{alternative.answer}</span>
-            </label>
-          </li>
-        ))}
-      </ul>
-      {currentQuestionIndex < questions.length - 1 && (
-        <>
+    <div className="max-w-3xl mx-auto">
+      <div className="flex flex-col items-center justify h-screen " >
+        <h1 className="text-2xl font-semibold mt-10 mb-8">
+          {currentQuestion?.question}
+        </h1>
+        <ul style={{ textAlign: 'center', padding: 0, margin: 0 }}>
+          {currentAlternatives.map((alternative) => (
+            <li key={alternative.id} className="mb-4">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  className="form-radio"
+                  name="alternative"
+                  value={alternative.id}
+                  onChange={() => setSelectedAlternative(alternative.id)}
+                />
+                <span className="pl-4">{alternative.answer}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-2 flex justify-end w-full">
+        {isLastQuestion ? (
+          <button
+            onClick={() => {
+              if (selectedAlternative !== null && selectedAlternative !== undefined && currentQuestion !== null) {
+                handleFinishTest(selectedAlternative, currentQuestion?.id);
+                refirectionFinish(taskId);
+              }
+            }}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Finalizar
+          </button>
+        ) : (
           <button
             onClick={() => {
               if (selectedAlternative !== null && selectedAlternative !== undefined && currentQuestion !== null) {
                 handleAnswerQuestion(selectedAlternative, currentQuestion?.id);
               }
             }}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            Next Question
+            Siguiente
           </button>
-  
-          {/* Popup */}
-          {isPopupVisible && (
-            <div className="popup">
-              <p>{popupMessage}</p>
-              <button onClick={() => setIsPopupVisible(false)}>Cerrar</button>
-            </div>
-          )}
-        </>
-      )}
+        )}
+        </div>
+      </div>
     </div>
   );
-  
 }
+
 
 export default AnswerAQ;
