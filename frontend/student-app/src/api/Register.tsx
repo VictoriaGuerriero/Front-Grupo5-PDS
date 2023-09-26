@@ -69,22 +69,33 @@ function Register() {
     const closePopup = () => {
         setShowPopup(false);
     }
+
+    const bgColorClass = registrationSuccess ? 'bg-green-200' : 'bg-red-200';
+    const borderColorClass = registrationSuccess ? 'border-green-600' : 'border-red-600';
+    const textColorClass = registrationSuccess ? 'text-green-900' : 'text-red-900';
+    const textContent = registrationSuccess ? 'Account created successfully.' : error;
+    const messageTitle = registrationSuccess ? 'Success!' : 'Error:';
+
     
 
     return (
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 {showPopup && (registrationSuccess || error) && (
-                    <div className={`bg-${registrationSuccess ? 'green' : 'red'}-200 border border-${registrationSuccess ? 'green' : 'red'}-600 text-${registrationSuccess ? 'green' : 'red'}-900 px-4 py-3 rounded relative mb-4`} role="alert">
+                    <div className={`${bgColorClass} border ${borderColorClass} ${textColorClass} px-4 py-3 rounded relative mb-4`} role="alert">
                         <button onClick={closePopup} className="absolute top-0 right-0 mt-2 mr-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 text-${registrationSuccess ? 'green' : 'red'}-900`} viewBox="0 0 20 20" fill="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 ${textColorClass}`} viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M14.293 5.293a1 1 0 0 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 1 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 1 1-1.414-1.414L8.586 10 4.293 5.707a1 1 0 1 1 1.414-1.414L10 8.586l4.293-4.293z" clipRule="evenodd" />
                             </svg>
                         </button>
-                        <strong className="font-bold">{registrationSuccess ? 'Success!' : 'Error:'}</strong> {registrationSuccess ? 'Account created successfully.' : error}
+                        <strong className="font-bold">{messageTitle}</strong> {textContent}
+                        {registrationSuccess && (
+                            <a href="http://localhost:3000/login" className={`font-semibold leading-6 text-${registrationSuccess ? 'green' : 'red'}-600 hover:text-${registrationSuccess ? 'green' : 'red'}-500`}> Go to Login</a>
+                        )}
+                    
                     </div>
                 )}
-                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900" onClick={goToRegister} >Create an account </h2>
+                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900" onClick={goToRegister}>Create an account </h2>
             </div>
 
 
