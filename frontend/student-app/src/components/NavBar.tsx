@@ -13,7 +13,7 @@ function NavBar({ xp, level }: NavBarProps) {
       </svg>
       <div>
         <p className="text-black">XP: {xp}</p>
-        <p className="text-black">Level: {level}</p>
+        <p className="text-black">Nivel: {level}</p>
       </div>
     </nav>
   );
