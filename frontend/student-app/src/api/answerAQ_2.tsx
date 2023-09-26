@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface Task {
     id: number;
@@ -37,7 +37,7 @@ interface Task {
   const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
   
 function AnswerAQ_2() {
-
+    const navigate = useNavigate();
     const {taskId} = useParams();
     const {studentId} = useParams()
 
@@ -151,7 +151,7 @@ function AnswerAQ_2() {
 
 
     const refirectionFinish = async (taskId: any) => {
-      window.location.href = '/student/'+studentId+'/finishalternative/'+taskId;
+      navigate('/student/'+studentId+'/finishalternative/'+taskId);
   };
 
     const handleFinishTest = async (alternativeId: number, currentQuestion: number) => {

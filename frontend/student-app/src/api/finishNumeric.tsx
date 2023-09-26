@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 
 const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
 
 function FinishNumeric(){
 
+    const navigate = useNavigate();
     const {taskId} = useParams();
     const {studentId} = useParams()
     const [message, setMessage] = useState<string>('')
@@ -34,7 +35,7 @@ function FinishNumeric(){
     }, [taskId])
 
     const handleGoBack = () => {
-        window.location.replace(`http://localhost:3000/home/${studentId}`)
+        navigate(`/home/${studentId}`)
     };
 
 

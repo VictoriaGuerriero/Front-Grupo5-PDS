@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface Task {
   id: number;
@@ -15,6 +15,7 @@ const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tas
 const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/';
 
 function NuevoIntento() {
+  const navigate = useNavigate();
   const { taskId, studentId } = useParams<{ taskId: any; studentId: any }>();
   const [actualTask, setActualTask] = useState<Task[]>([]);
   const [wrongAnswerList, setWrongAnswerList] = useState<number[]>([]);
@@ -70,7 +71,7 @@ function NuevoIntento() {
 
   const handleIntentarDeNuevoClick = () => {
     console.log('Botón "Intentar de Nuevo" fue presionado');
-    window.location.href = '/student/' + studentId + '/answerAQ2/' + taskId;
+    navigate('/student/' + studentId + '/answerAQ2/' + taskId);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Input, Button } from "@material-tailwind/react";
 import Swal from 'sweetalert2';
 
@@ -65,6 +65,7 @@ const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.ap
 //
 
 function GetNumeric(props: any) {
+    const navigate = useNavigate();
     const studentId = props.studentId
     const taskId = props.taskId
     const questions = props.questions
@@ -78,12 +79,6 @@ function GetNumeric(props: any) {
     const [volt, setVolt] = useState<string | undefined>('')
 
     const [listAnswer, setListAnswer] = useState<string []>([])
-
-    console.log("student",studentId)
-    console.log("task",taskId)
-    console.log("questions", questions)
-
-    
 
     const fetchNumeric = useCallback(() => {
         fetch(NUMERICQ_ENDPOINT)
@@ -220,7 +215,7 @@ function GetNumeric(props: any) {
                     if (data.message === 'Correct answer') {
                         // Perform actions for a correct answer
                         console.log('Correct Answer:', data.message);
-                        window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
+                        navigate(`/student/${studentId}/finishnumeric/${taskId}`)
                        
                     } else {
                         // Perform actions for an incorrect answer
@@ -252,7 +247,7 @@ function GetNumeric(props: any) {
                     if (data.message === 'Correct answer') {
                         // Perform actions for a correct answer
                         console.log(data);
-                        window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
+                        navigate(`/student/${studentId}/finishnumeric/${taskId}`)
                        
                     } else {
                         // Perform actions for an incorrect answer
@@ -304,14 +299,14 @@ function GetNumeric(props: any) {
                         'Content-type': 'application/json; charset=UTF-8',
                     },
                 })
-                window.location.replace('http://localhost:3000/home/'+studentId)
+                navigate('/home/'+studentId)
                 
             }
           })
     };
 
     const handleTerminarClick = () => {
-        window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
+        navigate(`/student/${studentId}/finishnumeric/${taskId}`)
     }
 
     return (

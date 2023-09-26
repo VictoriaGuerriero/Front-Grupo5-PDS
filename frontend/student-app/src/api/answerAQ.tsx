@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Task {
   id: number;
@@ -35,6 +36,7 @@ const ALTERNATIVEQUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerrier
 const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
 
 function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
+  const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [currentAlternatives, setCurrentAlternatives] = useState<Alternative[]>([]);
@@ -124,9 +126,9 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
       console.log(wrong_answer_list)
 
       if (wrong_answer_list.length > 0) {
-        window.location.href = '/student/'+studentId+'/nuevointento/'+taskId;
+        navigate('/student/'+studentId+'/nuevointento/'+taskId);
       } else {
-        window.location.href = '/student/'+studentId+'/finishalternative/'+taskId;
+        navigate('/student/'+studentId+'/finishalternative/'+taskId);
     };
   };
 

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CREATE_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/register/'
 
 function Register() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
@@ -58,12 +60,12 @@ function Register() {
 
         if (registrationSuccess) {
             console.log("·asdas")
-            window.location.replace('http://localhost:3000/login'); // Redirige a la página de inicio de sesión solo si el registro fue exitoso
+            navigate('/login'); // Redirige a la página de inicio de sesión solo si el registro fue exitoso
         } 
     }
 
     const goToRegister = () => {
-        window.location.replace('http://localhost:3000/register');
+        navigate('/register');
     }
 
     const closePopup = () => {

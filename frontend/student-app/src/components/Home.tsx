@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../static/home.css';
 import NavBar from './NavBar';
 import Swal from 'sweetalert2';
@@ -9,6 +9,7 @@ const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/
 const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/';
 
 function Home(){
+  const navigate = useNavigate();
   const { studentId } = useParams();
   const [student, setStudent] = useState<any>(null);
   const [allTasks, setAllTasks] = useState<any>(null);
@@ -120,7 +121,7 @@ function Home(){
 
   const handleGoAnswerTask = (taskId: any) => {
     console.log("task id", taskId)
-    window.location.replace(`http://localhost:3000/${studentId}/answertask/${Number(taskId)}`)
+    navigate(`/${studentId}/answertask/${Number(taskId)}`)
   };
 
  

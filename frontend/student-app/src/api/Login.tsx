@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useUser } from '../contexts/userContext'; 
+import { useNavigate } from 'react-router-dom'; 
 
 const LOGIN_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/login/'
 const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
@@ -11,6 +12,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const [showPopup, setShowPopup] = useState(false); // Estado para mostrar/ocultar el mensaje de error
+    const navigate = useNavigate();
     
     const handleEmailChange = (event: any) => {
         setUsername(event.target.value);
@@ -42,7 +44,7 @@ function Login() {
               setUser(data.user)
               //console.log(userId);
                 
-              window.location.href = `/home/${userId}/`;
+              navigate(`/home/${userId}/`);
             } else {
                 // Mostrar mensaje de error si el inicio de sesión falla
                 const data = await response.json();
