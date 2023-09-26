@@ -69,30 +69,15 @@ function GetNumeric(props: any) {
     const taskId = props.taskId
     const questions = props.questions
     const questionId = questions[0].id
-    const [student, setStudent] = useState<Student>();
-    const [task, setTask] = useState<Task>();
     const [question, setQuestion] = useState<Question>();
     const [numericQuestions, setNumericQuestions] = useState<NumericQuestion[]>([]);
-    const [lengthComb, setLengthComb] = useState<number | undefined>(0);
     const [circuitType, setCircuitType] = useState<string | undefined>('');
     const [numRes, setNumRes] = useState<string | undefined>('');
     const [combination, setCombination] = useState <string[]>([]);
     const [currentNumeric, setCurrentNumeric] = useState<NumericQuestion>()
     const [volt, setVolt] = useState<string | undefined>('')
 
-    const [currentQuestion, setCurrentQuestion] = useState<Question>()
     const [listAnswer, setListAnswer] = useState<string []>([])
-    // useEffect (() => {
-    //     fetch(STUDENT_ENDPOINT+studentId+'/')
-    //     .then((response) => response.json())
-    //     .then(data => {
-    //         console.log(data);
-    //         setStudent(data)
-    //       })
-    //     .catch((err) => {
-    //         console.log(err.message)
-    //     })
-    // }, [studentId])
 
     console.log("student",studentId)
     console.log("task",taskId)
@@ -150,10 +135,6 @@ function GetNumeric(props: any) {
         }
       }, [currentNumeric]);
       
-    
-
-
-
     useEffect (() => {
         fetchNumeric();
     }, [fetchNumeric])
@@ -333,14 +314,6 @@ function GetNumeric(props: any) {
         window.location.replace(`http://localhost:3000/student/${studentId}/finishnumeric/${taskId}`)
     }
 
-    // useEffect(() => {
-    //     if (incorrectCount === 1) {
-    //       showPopup(`Respuesta incorrecta. Tienes un intento más. Hint: `); // Show the popup
-    //     }
-    //   }, [incorrectCount]);
-
-
-    //   console.log("asjklfklfjklsdfjlk",combination,"asjklfklfjklsdfjlk")
     return (
         <div className="bg-lightPink-50 p-4 text-black rounded-md">
             <div className="text-l">{question?.question}</div>
@@ -417,14 +390,6 @@ function GetNumeric(props: any) {
             )}
             
             {/* Button */}
-            {/* <div className="flex items-center justify-between">
-                <Button className="bg-blue-500 text-white px-4 py-2 rounded mt-2" key ='enviar' onClick={handleButtonClick}>
-                    Enviar
-                </Button>
-                <Button className="bg-gray-500 text-white px-4 py-2 rounded mt-2" key='saltar' onClick={handleSaltarClick}>
-                    Saltar
-                </Button>
-            </div> */}
             {renderButtons()}
 
             {/* Popup */}

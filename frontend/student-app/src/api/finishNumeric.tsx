@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
+import NavBar from '../components/NavBar';
 
 const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
 
@@ -39,10 +40,12 @@ function FinishNumeric(){
 
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} className='rounded-md'>
-            <div className="bg-lightPink-50 p-4 text-black rounded-md">
-                <p>{message}</p>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2" onClick={handleGoBack}>Home</button>
+        <div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} className='rounded-md'>
+                <div className="bg-lightPink-50 p-4 text-black rounded-md">
+                    <p>{message}</p>
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2" onClick={handleGoBack}>Home</button>
+                </div>
             </div>
         </div>
     )

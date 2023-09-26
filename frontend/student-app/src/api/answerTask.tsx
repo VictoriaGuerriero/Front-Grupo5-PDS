@@ -146,7 +146,7 @@ function AnswerTask(){
         margin: '20px', // Add margin to create space
       }}>
         <ul>
-          {(task && task.type_task === 'AQ' && (
+          {(task && task.type_task === 'AQ' && questions.length > 0 && (
             <AnswerAQ questions={questions} taskId={taskIdToInt} studentId={studentIdToInt} />
           ))}
 

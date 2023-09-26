@@ -164,9 +164,13 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
       }
     };
 
+
     const handleAnswerQuestion = async (alternativeId: number, currentQuestion: number) => {
+      console.log("currentQuestion", currentQuestion)
+      console.log("alternativeId", alternativeId)
+      console.log("taskId", taskId)
       try {
-        const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/f/'+alternativeId+'/'+taskId+'/', {
+        const response = await fetch(QUESTIONS_ENDPOINT+currentQuestion+'/validate_a_answer/'+alternativeId+'/'+taskId+'/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -196,10 +200,10 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
 
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="flex flex-col items-center justify h-screen " >
+    <div className="max-w-3xl mx-auto bg-lightPink-50 p-4 text-black rounded-md max-h-screen overflow-y-auto">
+      <div className="flex flex-col items-center justify h-screen  " >
         <h1 className="text-2xl font-semibold mt-10 mb-8">
-          {currentQuestion?.question}
+          {currentQuestion?.question} {currentQuestion?.id}
         </h1>
         <ul style={{ textAlign: 'center', padding: 0, margin: 0 }}>
           {currentAlternatives.map((alternative) => (
@@ -212,7 +216,7 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
                   value={alternative.id}
                   onChange={() => setSelectedAlternative(alternative.id)}
                 />
-                <span className="pl-4">{alternative.answer}</span>
+                <span className="pl-4">{alternative.answer} {alternative.id}</span>
               </label>
             </li>
           ))}
