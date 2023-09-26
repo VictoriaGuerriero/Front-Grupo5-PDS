@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useUser } from '../contexts/userContext'; 
 
 const LOGIN_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/login/'
 const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
 
 
 function Login() {
+    const { setUser } = useUser();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -35,8 +37,9 @@ function Login() {
 
             if (response.ok) {
               const data = await response.json();
-              //console.log(data)
+              console.log(data)
               const userId = data.id;
+              setUser(data.user)
               //console.log(userId);
                 
               window.location.href = `/home/${userId}/`;
@@ -54,6 +57,8 @@ function Login() {
     const closePopup = () => {
         setShowPopup(false);
     }
+
+    
 
     return (
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

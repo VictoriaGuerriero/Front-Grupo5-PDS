@@ -164,7 +164,6 @@ function Home(){
 
   return (
     <div>
-      <NavBar xp={student?.xp} level={student?.level} />
 
       <div className="min-h-screen flex flex-col items-center justify-start py-10">
         <h1 className="text-4xl font-semibold mb-4">Welcome {student?.username}!!!!</h1>

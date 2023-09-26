@@ -38,7 +38,7 @@ const level = studentInfo?.level ?? 1;
 
   return (
     <div>
-      <NavBar xp={xp} level={level} />
+      {/* <NavBar xp={xp} level={level} /> */}
     </div>
   );
 }
