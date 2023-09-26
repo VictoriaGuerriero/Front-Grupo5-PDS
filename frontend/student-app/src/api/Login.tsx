@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
 
 const LOGIN_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/login/'
 const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
@@ -19,8 +18,6 @@ function Login() {
         setPassword(event.target.value);
     }
 
-    const navigate = useNavigate();
-
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
@@ -38,12 +35,11 @@ function Login() {
 
             if (response.ok) {
               const data = await response.json();
-              console.log(data)
+              //console.log(data)
               const userId = data.id;
-              console.log(userId);
-              //navigate(`/home/${userId}`);
+              //console.log(userId);
                 
-              //window.location.href = '/home';
+              window.location.href = `/home/${userId}/`;
             } else {
                 // Mostrar mensaje de error si el inicio de sesión falla
                 const data = await response.json();
