@@ -54,6 +54,8 @@ function AnswerAQ_2() {
     const [wrongAnswerList, setWrongAnswerList] = useState<number[]>([]);
     const [questions, setQuestions] = useState<Question[]>([]);
 
+     
+
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
 
@@ -220,6 +222,8 @@ function AnswerAQ_2() {
     
 
     return (
+      <div>
+
       <div className="max-w-3xl mx-auto text-black rounded-md max-h-screen overflow-y-auto">
         <div className="flex mb-2 ml-2 mt-2">
           <p className="text-sm text-gray-500 items-center">Pregunta {currentQuestionIndex + 1}/{questions.length}</p>
@@ -272,6 +276,7 @@ function AnswerAQ_2() {
           </div>
         </div>
   
+      </div>
       </div>
     );
 }
