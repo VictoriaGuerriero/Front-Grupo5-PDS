@@ -31,6 +31,25 @@ function FinishAlternative() {
     }
   };
 
+  const finishTask = async () => {
+    try {
+      const response = await fetch(`${TASK_ENDPOINT}${taskId}/finish_task/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.ok) {
+        window.location.href = `/home/${studentId}`;
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
+  
   useEffect(() => {
     // Llama a la función para obtener los puntos ganados
     getTaskDetails(taskId);
@@ -42,7 +61,11 @@ function FinishAlternative() {
       {pointsEarned !== null ? (
         <div className="text-center">
           <p className="mb-4">Has ganado {pointsEarned} puntos en esta tarea.</p>
-          <Link to={`/home/${studentId}`} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <Link
+            to="#"
+            onClick={finishTask} // Llama a la función finishTask al hacer clic
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
             Ir a la Página de Inicio
           </Link>
         </div>

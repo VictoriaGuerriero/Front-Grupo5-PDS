@@ -54,6 +54,8 @@ function AnswerAQ_2() {
     const [wrongAnswerList, setWrongAnswerList] = useState<number[]>([]);
     const [questions, setQuestions] = useState<Question[]>([]);
 
+     
+
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
 
@@ -217,19 +219,23 @@ function AnswerAQ_2() {
       handleNextQuestion();
     };
 
+    
 
     return (
-      <div className="max-w-3xl mx-auto">
-        <div className="flex flex-col items-center justify h-screen " >
-          <h1>RESPONDIENDO DE NUEVO LAS PREGUNTAS :D</h1>
-          <h1 className="text-2xl font-semibold mt-10 mb-8">
-            {currentQuestion?.question}
+      <div>
+
+      <div className="max-w-3xl mx-auto text-black rounded-md max-h-screen overflow-y-auto">
+        <div className="flex mb-2 ml-2 mt-2">
+          <p className="text-sm text-gray-500 items-center">Pregunta {currentQuestionIndex + 1}/{questions.length}</p>
+        </div>
+        <div className="flex flex-col items-center justify h-screen  " >
+          <h1 className="text-2xl font-semibold mt-3 mb-8">
+            {currentQuestion?.question} {currentQuestion?.id}
           </h1>
-          <h3 className='mb-8'>HINT: {currentQuestion?.hint}</h3>
           <ul style={{ textAlign: 'center', padding: 0, margin: 0 }}>
             {currentAlternatives.map((alternative) => (
               <li key={alternative.id} className="mb-4">
-                <label className="flex itcurrentQuestionems-center space-x-2">
+                <label className="flex items-center space-x-2">
                   <input
                     type="radio"
                     className="form-radio"
@@ -237,7 +243,7 @@ function AnswerAQ_2() {
                     value={alternative.id}
                     onChange={() => setSelectedAlternative(alternative.id)}
                   />
-                  <span className="pl-4">{alternative.answer}</span>
+                  <span className="pl-4">{alternative.answer} {alternative.id}</span>
                 </label>
               </li>
             ))}
@@ -251,7 +257,7 @@ function AnswerAQ_2() {
                   refirectionFinish(taskId);
                 }
               }}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
             >
               Finalizar
             </button>
@@ -262,13 +268,15 @@ function AnswerAQ_2() {
                   handleAnswerQuestion(selectedAlternative, currentQuestion?.id);
                 }
               }}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
             >
               Siguiente
             </button>
           )}
           </div>
         </div>
+  
+      </div>
       </div>
     );
 }
