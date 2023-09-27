@@ -202,9 +202,12 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
 
 
   return (
-    <div className="max-w-3xl mx-auto bg-lightPink-50 p-4 text-black rounded-md max-h-screen overflow-y-auto">
+    <div className="max-w-3xl mx-auto ">
+      <div className="flex mb-2 ml-2 mt-2">
+        <p className="text-sm text-gray-500 items-center">Pregunta {currentQuestionIndex + 1}/{questions.length}</p>
+      </div>
       <div className="flex flex-col items-center justify h-screen  " >
-        <h1 className="text-2xl font-semibold mt-10 mb-8">
+        <h1 className="text-2xl font-semibold mt-3 mb-8">
           {currentQuestion?.question} {currentQuestion?.id}
         </h1>
         <ul style={{ textAlign: 'center', padding: 0, margin: 0 }}>
@@ -232,7 +235,7 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
                 refirectionFinish(taskId);
               }
             }}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
           >
             Finalizar
           </button>
@@ -243,13 +246,14 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
                 handleAnswerQuestion(selectedAlternative, currentQuestion?.id);
               }
             }}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
           >
             Siguiente
           </button>
         )}
         </div>
       </div>
+
     </div>
   );
 }
