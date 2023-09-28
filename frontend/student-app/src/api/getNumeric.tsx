@@ -12,6 +12,8 @@ import Paralelo4Res from '../diagrams/parelelo4Res';
 import Mixto3Res from '../diagrams/mixto3Res';
 import Mixto4ResTipo1 from '../diagrams/mixto4ResTipo1';
 import Mixto4ResTipo2 from '../diagrams/mixto4ResTipo2';
+import Level4 from '../diagrams/level4';
+import Level5 from '../diagrams/level5';
 // import ElectricCircuit from './adiagram';
 
 interface Question {
@@ -444,6 +446,12 @@ function GetNumeric(props: any) {
             )}
             {circuitType === '4' && numRes === '4' && (
                 <Mixto4ResTipo2 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} r4={combination[6]}/>
+            )}
+            {circuitType === '5' && (
+                <Level4 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]}/>
+            )}
+            {circuitType === '6' && (
+                <Level5 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} r4={combination[6]} r5={combination[7]} r6={combination[8]} r7={combination[9]} r8={combination[10]}/>
             )}
             
 
