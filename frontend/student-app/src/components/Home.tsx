@@ -157,18 +157,39 @@ function Home(){
 
 
 
-  const handleGoAnswerTask = (taskId: any) => {
+  const handleGoAnswerTask = async (taskId: any) => {
     console.log("task id", taskId)
     startTask();
     navigate(`/${studentId}/answertask/${Number(taskId)}`)
+
+    try {
+      await start_task(taskId);
+  
+      navigate(`/${studentId}/answertask/${Number(taskId)}`);
+    } catch (error) {
+      console.error('Error al iniciar la tarea:', error);
+    }
   };
 
- 
-
-  // const handleCreateTask = (student: any) => {
-  //   <CreateTask2 student={student}/>
-  // };
-
+  const start_task = async (taskId: any) => {
+    try {
+      const response = await fetch(`${TASK_ENDPOINT}${taskId}/start_task/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.ok) {
+        console.log('Tarea iniciada');
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
+  
   const renderTask = () => {
     if (studentTask === null || studentTask === undefined) {
       return (
