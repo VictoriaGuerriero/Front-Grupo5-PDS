@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/';
 
 function FinishAlternative() {
   const { taskId } = useParams();
   const { studentId } = useParams();
+
+  const navigate = useNavigate();
 
   const [pointsEarned, setPointsEarned] = useState<number | null>(null);
 
@@ -41,7 +43,7 @@ function FinishAlternative() {
       });
   
       if (response.ok) {
-        window.location.href = `/home/${studentId}`;
+        navigate(`/home/${studentId}`);
       } else {
         throw new Error('Network response was not ok');
       }

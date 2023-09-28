@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import '../static/home.css';
 import NavBar from './NavBar';
 import Swal from 'sweetalert2';
+import { get } from 'http';
 
 
 const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/';
@@ -28,34 +29,46 @@ function Home(){
           });
     }, [studentId]);
 
-  useEffect(() => {
+  const getTask = useCallback(() => {
     fetch(`${TASK_ENDPOINT}`)
       .then((response) => response.json())
       .then((data) => {
         setAllTasks(data);
+        console.log("all tasks", data)  
       })
       .catch((err) => {
         console.error(err.message);
       });
-  }, []);
+  }, [])
+
+  useEffect(() => {
+    getTask();
+  }, [getTask])
 
     useEffect(() => {
       if (allTasks !== null && student !== null) {
-        const task = allTasks.find((task: any) => task.student === student.id);
+        const task = allTasks.find((task: any) => task.student === student.id && task.state === 'A') ;
+        console.log("task", task)
         setStudentTask(task);
-        console.log("student task", studentTask)
       }
-  }, [allTasks, student, studentTask]);
+  }, [allTasks]);
+
+  console.log("student task",studentTask)
+  console.log("task count", student?.task_count)
+  
+  console.log("student level", student?.level)
 
     useEffect(() => {
-        if (student?.level === 1 || student?.level === 2){
+        if (student?.level === 1 || student?.level === 2 || student?.level === 0){
             setTaskDiff('Easy')
         }
-        else if (student?.level === 3 || student?.level === 4 || student?.level === 5 || student?.level === 5 || student?.level === 6 || student?.level === 7){
+        else if (student?.level === 3 || student?.level === 4 || student?.level === 5 || student?.level === 6 || student?.level === 7){
             setTaskDiff('Medium')
+            console.log("entro a medio")
         }
         else{
             setTaskDiff('Hard')
+            console.log("se paso pa tonto")
         }
 
         if (student?.task_count === 0 || (student && student.task_count !== undefined && student?.task_count % 2 === 0)){
@@ -66,7 +79,7 @@ function Home(){
         }
     }, [student])
 
-    const createTask = useCallback(() => {
+    const createTask = () => {
       fetch(TASK_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -82,16 +95,19 @@ function Home(){
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
+          getTask();
           Swal.fire(
             'Tarea Creada!',
             'La tarea ha sido creada con éxito!',
             'success'
           )
+          // getTask();
+          // console.log("hello, world!")
         })
         .catch((err) => {
           console.error(err.message);
         });
-    }, [student?.level, student?.username, studentId, taskDiff, taskType]);
+    }
 
     useEffect(() => {
       if (studentTask && student && studentTask.questions.length === 0){
@@ -115,12 +131,35 @@ function Home(){
             console.error('Fetch error:', error);
           });
       }
-    }, [studentTask])
+    }, [student, studentTask])
+
+    const startTask = () => {
+      fetch(TASK_ENDPOINT + `${studentTask.id}/start_task/`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        })
+        .then((data) => {
+            console.log("dataaaa", data)
+        })
+        .catch((error) => {
+          console.error('Fetch error:', error);
+        });
+    }
 
 
 
   const handleGoAnswerTask = (taskId: any) => {
     console.log("task id", taskId)
+    startTask();
     navigate(`/${studentId}/answertask/${Number(taskId)}`)
   };
 
@@ -131,33 +170,34 @@ function Home(){
   // };
 
   const renderTask = () => {
-    if (studentTask !== null && studentTask !== undefined) {
+    if (studentTask === null || studentTask === undefined) {
       return (
-        <div>
-          <div className="text-lg mb-2 flex flex-col items-center">Task Disponibles:</div>
-          <ul className="list-disc pl-8 mt-2 task-list-home"></ul>
-          <div key={studentTask?.id} className="mb-2 rounded-md">
-            <div className="bg-white border border-gray-300 p-4 flex flex-col rounded-md">
-              <div className="mb-2">{studentTask?.name}</div>
-              <div className="mb-2">Type: {studentTask?.type_task}</div>
-              <div className="flex justify-end">
-                <button onClick={() => handleGoAnswerTask(studentTask?.id)} className="bg-blue-500 text-white px-4 py-2 rounded">Empezar</button>
-              </div>
-            </div>
+        <div className="mb-2 rounded-md">
+        <div className="bg-white border border-gray-300 p-4 flex flex-col rounded-md">
+          <div className="mb-2 items-center">No tienes tareas disponibles</div>
+          <div className="mb-4">
+            <button onClick={() => {createTask();}} className="bg-blue-500 text-white px-4 py-2 rounded">Quiero una tarea</button>
           </div>
         </div>
+      </div>
       )
     }
     else{
       return (
-        <div className="mb-2 rounded-md">
+
+        <div>
+        <div className="text-lg mb-2 flex flex-col items-center">Task Disponibles:</div>
+        <ul className="list-disc pl-8 mt-2 task-list-home"></ul>
+        <div key={studentTask?.id} className="mb-2 rounded-md">
           <div className="bg-white border border-gray-300 p-4 flex flex-col rounded-md">
-            <div className="mb-2 items-center">No tienes tareas disponibles</div>
-            <div className="mb-4">
-              <button onClick={createTask} className="bg-blue-500 text-white px-4 py-2 rounded">Quiero una tarea</button>
+            <div className="mb-2">{studentTask?.name}</div>
+            <div className="mb-2">Type: {studentTask?.type_task}</div>
+            <div className="flex justify-end">
+              <button onClick={() => handleGoAnswerTask(studentTask?.id)} className="bg-blue-500 text-white px-4 py-2 rounded">Empezar</button>
             </div>
           </div>
         </div>
+      </div>
       )
     }
   }
