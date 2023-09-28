@@ -39,7 +39,7 @@ function NavBar() {
     if (user !== null) {
       getStudent(user.id);
     }
-}, [id, user])
+}, [id, user, student])
 
   return (
     <nav className="flex items-center justify-between flex-wrap bg-lightPink-50 p-6">
