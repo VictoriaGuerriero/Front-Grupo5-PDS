@@ -94,7 +94,7 @@ function Register() {
                         </button>
                         <strong className="font-bold">{messageTitle}</strong> {textContent}
                         {registrationSuccess && (
-                            <a href="http://localhost:3000/login" className={`font-semibold leading-6 text-${registrationSuccess ? 'green' : 'red'}-600 hover:text-${registrationSuccess ? 'green' : 'red'}-500`}> Go to Login</a>
+                            <a href="https://eloquent-salmiakki-1a3e6b.netlify.app/" className={`font-semibold leading-6 text-${registrationSuccess ? 'green' : 'red'}-600 hover:text-${registrationSuccess ? 'green' : 'red'}-500`}> Go to Login</a>
                         )}
                     
                     </div>
