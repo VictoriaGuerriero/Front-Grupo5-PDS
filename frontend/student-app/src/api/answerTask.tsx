@@ -127,16 +127,17 @@ function AnswerTask(){
       <div >
       <nav className="bg-darkBlue-500 p-4 mb-4 sticky top-0 z-10">
         {/* Navbar-like styling */}
-        <h1 className="text-2xl text-white">{task?.description}</h1>
-        <h2 className="text-xl text-white">{task?.name}</h2>
+        <h1 className="text-2xl text-white"> {task?.description}</h1>
+        <h2 className="text-2xl text-white text-center mb-4">{task?.name}</h2>
+        <div className="mr-2 ml-2 mb-4 border-b border-gray-300"></div>
         {task && task.type_task === 'AQ' ? ( 
-         <h5 className="text-lg text-white">{'Alternativas'}</h5>
+         <h5 className="text-lg text-white mb-2">{'Tipo: Alternativas'}</h5>
          ): (
-          <h5 className="text-lg text-white">{'Numerico'}</h5>
+          <h5 className="text-lg text-white">{'Tipo: Numerico'}</h5>
          )}
         {task ? (
             <h6 className="text-lg text-white">
-              {task.difficulty === 'Easy' ? 'Fácil' : task.difficulty === 'Intermediant' ? 'Intermedio' : 'Difícil'}
+              {task.difficulty === 'Easy' ? 'Dificultad: Fácil' : task.difficulty === 'Intermediant' ? 'Dificultad: Intermedio' : 'Dificultad: Difícil'}
             </h6>
           ) : null}
       </nav>
