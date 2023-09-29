@@ -42,7 +42,7 @@ function Login() {
               const userId = data.id;
               setUser(data.user)
               //console.log(userId);
-              if (data.user.role === 'professor') {
+              if (data.user.username === 'professor') {
                 window.location.replace('https://professor-app--chic-yeot-542ba0.netlify.app/')
               }
               else{
