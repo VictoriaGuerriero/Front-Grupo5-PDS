@@ -1,10 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-interface Task {
-    id: number;
-    questions: [];
-  }
   
   interface Question {
     id: number;
@@ -25,11 +21,6 @@ interface Task {
     question: number;
   }
   
-  interface AnswerAQProps {
-    questions: Question[];
-    taskId: number;
-    studentId: number;
-  }
   
   const ALTERNATIVE_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/alternative/'
   const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/questions/'
@@ -45,7 +36,6 @@ function AnswerAQ_2() {
     const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
     const [currentAlternatives, setCurrentAlternatives] = useState<Alternative[]>([]);
     const [allAlternatives, setAllAlternatives] = useState<Alternative[]>([]);
-    const [serverResponse, setServerResponse] = useState<string | null>(null);
     const [selectedAlternative, setSelectedAlternative] = useState<number | null>(null);
     const [currentAlternativeQuestion, setCurrentAlternativeQuestion] = useState<AlternativeQuestion[]>([]);
 

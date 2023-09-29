@@ -3,7 +3,6 @@ import { useUser } from '../contexts/userContext';
 import { useNavigate } from 'react-router-dom'; 
 
 const LOGIN_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/login/'
-const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/students/'
 
 
 function Login() {

@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-interface Task {
-  id: number;
-  questions: [];
-}
 
 interface Question {
   id: number;
@@ -17,7 +13,6 @@ const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.ver
 function NuevoIntento() {
   const navigate = useNavigate();
   const { taskId, studentId } = useParams<{ taskId: any; studentId: any }>();
-  const [actualTask, setActualTask] = useState<Task[]>([]);
   const [wrongAnswerList, setWrongAnswerList] = useState<number[]>([]);
   const [wrongQuestions, setWrongQuestions] = useState<Question[]>([]);
 

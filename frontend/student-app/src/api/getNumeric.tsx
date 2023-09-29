@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Input, Button } from "@material-tailwind/react";
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
 
 import Serie2Resist from '../diagrams/serie2Resist';
 import Serie3Resist from '../diagrams/serie3Resist';

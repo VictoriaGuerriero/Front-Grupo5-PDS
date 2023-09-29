@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-interface Task {
-  id: number;
-  questions: [];
-}
 
 interface Question {
   id: number;
@@ -44,8 +40,6 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
   const [serverResponse, setServerResponse] = useState<string | null>(null);
   const [selectedAlternative, setSelectedAlternative] = useState<number | null>(null);
   const [currentAlternativeQuestion, setCurrentAlternativeQuestion] = useState<AlternativeQuestion[]>([]);
-
-  const [questionOfTask, setQuestionOfTask] = useState<Question[]>([]);
 
   const [all_alternative_question, setAll_alternative_question] = useState<AlternativeQuestion[]>([]);
 

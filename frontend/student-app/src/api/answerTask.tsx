@@ -53,8 +53,7 @@ interface Question {
 // }
 
 const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/tasks/'
-const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/students/'
-const ALTERNATIVEQUESTION_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/alternativequestion/'
+
 
 
 function AnswerTask(){

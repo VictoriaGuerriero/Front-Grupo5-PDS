@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../static/home.css';
-import NavBar from './NavBar';
 import Swal from 'sweetalert2';
 
 
