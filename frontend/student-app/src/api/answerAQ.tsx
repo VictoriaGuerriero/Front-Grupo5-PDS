@@ -30,10 +30,10 @@ interface AnswerAQProps {
   studentId: number;
 }
 
-const ALTERNATIVE_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/alternative/'
-const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/'
-const ALTERNATIVEQUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/alternativequestion/'
-const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
+const ALTERNATIVE_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/alternative/'
+const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/questions/'
+const ALTERNATIVEQUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/alternativequestion/'
+const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/tasks/'
 
 function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
   const navigate = useNavigate();

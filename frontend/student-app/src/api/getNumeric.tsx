@@ -34,9 +34,9 @@ interface NumericQuestion {
     question: number;
 }
 
-const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
-const NUMERICQ_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/numericquestion/'
-const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/'
+const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/tasks/'
+const NUMERICQ_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/numericquestion/'
+const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/questions/'
 
 //
 

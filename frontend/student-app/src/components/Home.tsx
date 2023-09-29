@@ -3,11 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import '../static/home.css';
 import NavBar from './NavBar';
 import Swal from 'sweetalert2';
-import { get } from 'http';
 
 
-const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/';
-const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/';
+const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/students/';
+const TASK_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/tasks/';
 
 function Home(){
   const navigate = useNavigate();

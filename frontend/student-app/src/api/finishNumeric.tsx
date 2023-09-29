@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 
-const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
+const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/tasks/'
 
 function FinishNumeric(){
 

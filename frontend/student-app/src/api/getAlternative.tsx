@@ -8,7 +8,7 @@ interface Alternative {
   is_correct: Boolean;
 }
 
-const ALTERNATIVE_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/alternative/';
+const ALTERNATIVE_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/alternative/';
 
 function GetAlternatives({ questionId }: { questionId: any }) {
   const [alternatives, setAlternatives] = useState<Alternative[]>([]);

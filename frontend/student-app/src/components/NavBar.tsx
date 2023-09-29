@@ -4,7 +4,7 @@ import { useUser } from '../contexts/userContext';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/';
+const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/students/';
 
 
 

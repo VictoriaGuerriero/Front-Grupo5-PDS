@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const CREATE_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/register/'
+const CREATE_USER_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero-virid.vercel.app/register/'
 
 function Register() {
     const navigate = useNavigate();
