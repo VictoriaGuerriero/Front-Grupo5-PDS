@@ -1,18 +1,18 @@
 //index.html 200
-/
-/home/:studentId 200
-/register 200
-/login 200
+
+/home/:studentId /index.html 200
+/register /index.html 200
+/login /index.html 200
 
 
-/:studentId/answerAQ/:taskId 200
-/student/:studentId/getNumeric/:taskId 200
+/:studentId/answerAQ/:taskId /index.html 200
+/student/:studentId/getNumeric/:taskId /index.html 200
 
-/:studentId/answertask/:taskId 200
+/:studentId/answertask/:taskId /index.html 200
 
-/student/:studentId/finishnumeric/:taskId 200
+/student/:studentId/finishnumeric/:taskId /index.html 200
 
-/:studentId/answertask/:taskId 200
-/student/:studentId/answerAQ2/:taskId 200
-/student/:studentId/nuevointento/:taskId 200
-/student/:studentId/finishalternative/:taskId 200
+/:studentId/answertask/:taskId /index.html 200
+/student/:studentId/answerAQ2/:taskId /index.html 200
+/student/:studentId/nuevointento/:taskId /index.html 200
+/student/:studentId/finishalternative/:taskId /index.html 200
