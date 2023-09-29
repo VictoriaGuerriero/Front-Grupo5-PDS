@@ -49,7 +49,7 @@ function Home(){
         console.log("task", task)
         setStudentTask(task);
       }
-  }, [allTasks]);
+  }, [allTasks, student]);
 
   console.log("student task",studentTask)
   console.log("task count", student?.task_count)

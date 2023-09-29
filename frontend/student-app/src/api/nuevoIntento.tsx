@@ -63,7 +63,7 @@ function NuevoIntento() {
 
   useEffect(() => {
     getTaskDetails(taskId);
-  }, [taskId]);
+  });
 
 
   const handleIntentarDeNuevoClick = () => {
