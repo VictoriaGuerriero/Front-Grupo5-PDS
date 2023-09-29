@@ -190,6 +190,7 @@ function Home(){
     }
   };
   
+  
   const renderTask = () => {
     if (studentTask === null || studentTask === undefined) {
       return (
@@ -223,17 +224,89 @@ function Home(){
     }
   }
 
+  const obtenerTextoSegunNivel = (nivel: number) => {
+    if (nivel === 1 || nivel === 2) {
+      return (
+        <>
+          <h2 className='mb-5'>Unidad: Resistencias en Serie y Paralelo</h2>
+          <p className='mb-5 justify text-center'>
+            En este tema, aprenderás cómo calcular la resistencia total de un circuito que contiene resistencias conectadas en serie y en paralelo. La resistencia en serie se calcula sumando simplemente todas las resistencias, mientras que la resistencia en paralelo se calcula utilizando la fórmula inversa.
+          </p>
+          <p>Fórmula para resistencias en serie: R_total = R1 + R2 + R3 + ...</p>
+          <p className='mb-5'>Fórmula para resistencias en paralelo: 1 / R_total = 1 / R1 + 1 / R2 + 1 / R3 + ...</p>
+        </>
+      );
+    } else if (nivel === 3) {
+      return (
+        <>
+          <h2 className='mb-5'>Unidad: Kirchhoff - Suma de Tensiones</h2>
+          <p className='mb-5 justify text-center'>
+            En esta sección, estudiarás la ley de Kirchhoff para la suma de tensiones en un circuito eléctrico. Esta ley establece que la suma algebraica de las caídas de tensión en un circuito cerrado es igual a la suma de las fuerzas electromotrices en ese circuito. Esta ley es fundamental para analizar circuitos eléctricos complejos.
+          </p>
+          <p className='mb-5'>Fórmula de Kirchhoff para la suma de tensiones: ΣV = ΣEMF</p>
+        </>
+      );
+    } else if (nivel === 4 || nivel === 5) {
+      return (
+        <>
+          <h2 className='mb-5'>Unidad: Kirchhoff - Suma de Corrientes</h2>
+          <p className='mb-5 justify text-center'>
+            En esta sección, explorarás la ley de Kirchhoff para la suma de corrientes en un nodo de un circuito eléctrico. Esta ley establece que la suma algebraica de las corrientes en un nodo es igual a cero. Esta ley es esencial para analizar la distribución de corriente en un circuito complejo.
+          </p>
+          <p className='mb-5'>Fórmula de Kirchhoff para la suma de corrientes en un nodo: ΣI = 0</p>
+        </>
+      );
+    } else if (nivel === 6) {
+      return (
+        <>
+          <h2 className='mb-5'>Unidad: Tipos de Condensadores</h2>
+          <p className='mb-5 justify text-center'>
+            Este tema se centra en los diferentes tipos de condensadores utilizados en electrónica, sus características y aplicaciones. Aprenderás sobre condensadores cerámicos, electrolíticos, de película y otros, y cómo elegir el adecuado para tus proyectos.
+          </p>
+          <p className='mb-5'>Los condensadores son componentes esenciales en la electrónica y tienen una amplia gama de usos, desde almacenar energía hasta filtrar señales.</p>
+        </>
+      );
+    } else if (nivel === 7 || nivel === 8) {
+      return (
+        <>
+          <h2 className='mb-5'>Unidad: Energía de un Condensador</h2>
+          <p className='mb-5 justify text-center'>
+            En esta sección, se aborda el cálculo de la energía almacenada en un condensador. La energía de un condensador se almacena en función de su capacidad y la tensión aplicada. Comprenderás cómo calcular la energía almacenada y cómo esta propiedad es útil en aplicaciones prácticas.
+          </p>
+          <p className='mb-5'>Fórmula de energía del condensador: E = 0.5 * C * V^2</p>
+        </>
+      );
+    } else if (nivel === 9 || nivel === 10) {
+      return (
+        <>
+          <h2 className='mb-5'>Unidad: Carga de un Condensador</h2>
+          <p className='mb-5 justify text-center'>
+            Este tema se centra en cómo calcular la carga almacenada en un condensador en función de su capacidad y la tensión aplicada. Entenderás cómo los condensadores almacenan carga eléctrica y cómo puedes utilizar esta propiedad en circuitos electrónicos.
+          </p>
+          <p className='mb-5'>Fórmula de carga del condensador: Q = C * V</p>
+        </>
+      );
+    } else {
+      return "Nivel no reconocido";
+    }
+  };
+  
+
+  
+
 
   return (
     <div>
 
       <div className="min-h-screen flex flex-col items-center justify-start py-10">
-        <h1 className="text-4xl font-semibold mb-4">Welcome {student?.username}!!!!</h1>
+        <h1 className="text-4xl font-semibold mb-10">Welcome {student?.username}!!!!</h1>
         {renderTask()}
+        <div className="w-[calc(100vw*2/3)] mx-auto mt-10 ml-10 mr-10">
+          <div className="h-screen flex flex-col items-center justify">
+            {obtenerTextoSegunNivel(student?.level)}
+          </div>
+        </div>
       </div>
-
-      
-
     </div>
   )
 }
