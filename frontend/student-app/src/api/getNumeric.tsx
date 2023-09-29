@@ -15,6 +15,7 @@ import Mixto4ResTipo2 from '../diagrams/mixto4ResTipo2';
 import Level4 from '../diagrams/level4';
 import Level5 from '../diagrams/level5';
 import Level6 from '../diagrams/level6';
+import Level7 from '../diagrams/level7';
 // import ElectricCircuit from './adiagram';
 
 interface Question {
@@ -458,6 +459,9 @@ function GetNumeric(props: any) {
             )}
             {circuitType === '7' && (
                 <Level6 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} c1={combination[7]} c2={combination[8]}></Level6>
+            )}
+            {circuitType === '8' && (
+                <Level7 cap={combination[1]} volt={combination[2]}></Level7>
             )}
             
 
