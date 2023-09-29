@@ -36,6 +36,8 @@ function GetStudentInfo() {
 const xp = studentInfo?.xp ?? 0;
 const level = studentInfo?.level ?? 1;
 
+console.log(xp, level)
+
   return (
     <div>
       {/* <NavBar xp={xp} level={level} /> */}

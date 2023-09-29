@@ -33,6 +33,8 @@ function NuevoIntento() {
       const wrongAnswers = data.wrong_answer;
       setWrongAnswerList(wrongAnswers);
 
+      console.log(wrongAnswerList)
+
       // Obtenemos los detalles de las preguntas incorrectas
       const questionsDetails = await Promise.all(
         wrongAnswers.map(async (questionId: any) => {

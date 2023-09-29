@@ -16,7 +16,7 @@ function NavBar() {
 
   const navigate = useNavigate();
  
-  console.log(user)
+  console.log(user, xp, level)
 
 
   const handleLogOut = () => {

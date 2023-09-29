@@ -48,6 +48,7 @@ function AnswerAQ_2() {
 
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
+    console.log(currentAlternativeQuestion, wrongAnswerList)
 
     const getTaskDetails = async (taskId: any) => {
       try {

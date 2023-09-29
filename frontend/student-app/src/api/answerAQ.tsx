@@ -93,6 +93,7 @@ function AnswerAQ({ questions, taskId, studentId }: AnswerAQProps) {
       }
     }, [currentQuestionIndex, questions, allAlternatives, all_alternative_question]);
     
+    console.log(serverResponse, currentAlternativeQuestion)
 
     const getTaskDetails = async (taskId: any) => {
       try {

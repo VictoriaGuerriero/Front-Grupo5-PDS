@@ -12,6 +12,8 @@ function Register() {
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
 
+    console.log(email, password, username)
+
 
     const handleSubmit = (event : any) => {
         event.preventDefault();
