@@ -12,34 +12,11 @@ import Paralelo4Res from '../diagrams/parelelo4Res';
 import Mixto3Res from '../diagrams/mixto3Res';
 import Mixto4ResTipo1 from '../diagrams/mixto4ResTipo1';
 import Mixto4ResTipo2 from '../diagrams/mixto4ResTipo2';
+import Level4 from '../diagrams/level4';
+import Level5 from '../diagrams/level5';
+import Level6 from '../diagrams/level6';
+import Level7 from '../diagrams/level7';
 // import ElectricCircuit from './adiagram';
-
-interface Task {
-    id: number;
-    questions: [];
-    name: string;
-    student: number; //student id fk
-    description: string;
-    type_task: string;
-    state: string;
-    xp_in_task: number;
-    difficulty: string;
-    wrong_answer: [];
-
-}
-
-interface Student {
-    id: number;
-    username: string;
-    email: string;
-    xp: number;
-    level: number;
-    correctly_answered_questions: [];
-    incorrectly_answered_questions: [];
-    questions_pased: [];
-    used_combinations: [];
-    task_count: number;
-}
 
 interface Question {
     id: number;
@@ -59,7 +36,6 @@ interface NumericQuestion {
 
 const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
 const NUMERICQ_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/numericquestion/'
-const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
 const QUESTIONS_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/questions/'
 
 //
@@ -104,6 +80,14 @@ function GetNumeric(props: any) {
         })
     }, [questionId])
 
+    useEffect (() => {
+        fetchNumeric();
+    }, [fetchNumeric])
+
+    useEffect(() => {
+        fetchQuestion();
+    }, [fetchQuestion])
+
 
     useEffect(() => {
         for (let i = 0; i < numericQuestions.length; i++) {
@@ -114,6 +98,7 @@ function GetNumeric(props: any) {
       }, [numericQuestions, questionId]);
 
       console.log("answer", currentNumeric?.answer)
+
       
       useEffect(() => {
         if (currentNumeric) {
@@ -130,19 +115,14 @@ function GetNumeric(props: any) {
         }
       }, [currentNumeric]);
       
-    useEffect (() => {
-        fetchNumeric();
-    }, [fetchNumeric])
-
+    
     useEffect(() => {
-        fetchQuestion();
-    }, [fetchQuestion])
-
-    const commaRegex: RegExp = /,/;
-
-    if (currentNumeric?.answer !== undefined && commaRegex.test(currentNumeric.answer)) {
-        setListAnswer(currentNumeric.answer.split(','))
-    } 
+        const commaRegex: RegExp = /,/;
+        if (currentNumeric?.answer !== undefined && commaRegex.test(currentNumeric.answer)) {
+            setListAnswer(currentNumeric.answer.split(','))
+        }
+    },[currentNumeric?.answer])
+     
 
     const [studentAnswer, setStudentAnswer] = useState<string>('')
     const [variable1, setVariable1] = useState<string>('');
@@ -150,6 +130,8 @@ function GetNumeric(props: any) {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
     const [incorrectCount, setIncorrectCount] = useState<number>(0);
+    const [var1IncorrectCount, setVar1IncorrectCount] = useState<number>(0);
+    const [var2IncorrectCount, setVar2IncorrectCount] = useState<number>(0);
 
     const handleVariable1Change = (e: React.ChangeEvent<HTMLInputElement>) => {
         setVariable1(e.target.value);
@@ -165,12 +147,10 @@ function GetNumeric(props: any) {
         setIsPopupVisible(true);
     };
 
-    const tolerance = 0.05;
-
     const studentAnswerNumber = parseFloat(studentAnswer);
     const answerString = currentNumeric?.answer;
-    const variable1Number = parseFloat(variable1);
-    const variable2Number = parseFloat(variable2);
+    // const variable1Number = parseFloat(variable1);
+    // const variable2Number = parseFloat(variable2);
 
     const renderButtons = () => {
         if (incorrectCount !== 2) { // Replace 'shouldHideButtons' with your actual condition
@@ -262,15 +242,146 @@ function GetNumeric(props: any) {
                     // Do something for error cases
                 });
             }
-            else {
-                const correctVar1 = parseFloat(listAnswer[0])
-                const correctVar2 = parseFloat(listAnswer[1])
-                if ((Math.abs(variable1Number - correctVar1) <= tolerance) && (Math.abs(variable2Number - correctVar2) <= tolerance)) {
-                    console.log("Correct!");
-                } else {
-                    console.log("Incorrect. Try again.");
-                    setIncorrectCount(incorrectCount + 1);
+            else if (listAnswer.length === 2 && incorrectCount === 0) {
+                fetch(QUESTIONS_ENDPOINT + `${questionId}/validate_2n_answer/${taskId}/?answer1=${variable1}&answer2=${variable2}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); 
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .then(data => {
+                    if (data.message === 'Correct answer') {
+                        // Perform actions for a correct answer
+                        console.log('Correct Answer:', data.message);
+                        navigate(`/student/${studentId}/finishnumeric/${taskId}`)
+                       
+                    } else {
+                        // Perform actions for an incorrect answer
+                        console.log('Incorrect Answer:', data['HINT:']);
+                        setIncorrectCount(incorrectCount + 1)
+                        if (data.message === "Answer 1 correct"){
+                            showPopup(`Respuesta 2 Incorrecta. Tienes un intento más. Hint: ${ data['HINT:']}`)
+                            setVar2IncorrectCount(var2IncorrectCount + 1)
+                        }
+                        else {
+                            showPopup(`Respuesta 1 Incorrecta. Tienes un intento más. Hint: ${ data['HINT:']}`)
+                            setVar1IncorrectCount(var1IncorrectCount + 1)
+                        }
+                        
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+            }
+            else if (listAnswer.length === 2 && incorrectCount === 1){
+                if (var1IncorrectCount === 1 && var2IncorrectCount === 0){
+                    fetch(QUESTIONS_ENDPOINT + `${questionId}/validate_2n_2answer/${taskId}/?answer1=${variable1}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json; charset=UTF-8',
+                        },
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json(); 
+                        } else {
+                            throw new Error('Network response was not ok');
+                        }
+                    })
+                    .then(data => {
+                        if (data.message === 'Answer 1 correct') {
+                            // Perform actions for a correct answer
+                            console.log('Correct Answer:', data.message);
+                            navigate(`/student/${studentId}/finishnumeric/${taskId}`)
+                           
+                        } else {
+                            // Perform actions for an incorrect answer
+                            console.log('Incorrect Answer:', data['HINT:']);
+                            setIncorrectCount(incorrectCount + 1)
+                            showPopup(`Respuesta 1 Incorrecta.`)
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
                 }
+                else if (var2IncorrectCount === 1 && var1IncorrectCount === 0){
+                    fetch(QUESTIONS_ENDPOINT + `${questionId}/validate_2n_2answer/${taskId}/?answer2=${variable2}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json; charset=UTF-8',
+                        },
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json(); 
+                        } else {
+                            throw new Error('Network response was not ok');
+                        }
+                    })
+                    .then(data => {
+                        if (data.message === 'Answer 2 correct') {
+                            // Perform actions for a correct answer
+                            console.log('Correct Answer:', data.message);
+                            navigate(`/student/${studentId}/finishnumeric/${taskId}`)
+                           
+                        } else {
+                            // Perform actions for an incorrect answer
+                            console.log('Incorrect Answer:', data['HINT:']);
+                            setIncorrectCount(incorrectCount + 1)
+                            showPopup(`Respuesta 2 Incorrecta.`)
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+                }
+                else if (var1IncorrectCount === 1 && var2IncorrectCount === 1){
+                    fetch(QUESTIONS_ENDPOINT + `${questionId}/validate_2n_2answer/${taskId}/?answer1=${variable1}&answer2=${variable2}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json; charset=UTF-8',
+                        },
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json(); 
+                        } else {
+                            throw new Error('Network response was not ok');
+                        }
+                    })
+                    .then(data => {
+                        if (data.message === 'Correct answer') {
+                            // Perform actions for a correct answer
+                            console.log('Correct Answer:', data.message);
+                            navigate(`/student/${studentId}/finishnumeric/${taskId}`)
+                           
+                        } else if (data.message === 'Answer 1 correct'){ 
+                            // Perform actions for an incorrect answer
+                            console.log('Incorrect Answer 1:', data['HINT:']);
+                            setIncorrectCount(incorrectCount + 1)
+                            showPopup(`Respuesta 2 Incorrecta.`)
+                        }
+                        else {
+                            // Perform actions for an incorrect answer
+                            console.log('Incorrect Answer 2:', data['HINT:']);
+                            setIncorrectCount(incorrectCount + 1)
+                            showPopup(`Respuesta 1 Incorrecta.`)
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+                }
+
             }
             
         }
@@ -339,6 +450,18 @@ function GetNumeric(props: any) {
             )}
             {circuitType === '4' && numRes === '4' && (
                 <Mixto4ResTipo2 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} r4={combination[6]}/>
+            )}
+            {circuitType === '5' && (
+                <Level4 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} r4={combination[6]}/>
+            )}
+            {circuitType === '6' && (
+                <Level5 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} r4={combination[6]} r5={combination[7]} r6={combination[8]} r7={combination[9]} r8={combination[10]}/>
+            )}
+            {circuitType === '7' && (
+                <Level6 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} c1={combination[7]} c2={combination[8]}></Level6>
+            )}
+            {circuitType === '8' && (
+                <Level7 cap={combination[1]} volt={combination[2]}></Level7>
             )}
             
 

@@ -226,9 +226,9 @@ function AnswerAQ_2() {
 
       <div className="max-w-3xl mx-auto text-black rounded-md max-h-screen overflow-y-auto">
         <div className="flex mb-2 ml-2 mt-2">
-          <p className="text-sm text-gray-500 items-center">Pregunta {currentQuestionIndex + 1}/{questions.length}</p>
+          <span className="text-sm text-gray-700 items-center bg-lightPink-50 bg-opacity-30 rounded-md">Pregunta {currentQuestionIndex + 1}/{questions.length}</span>
         </div>
-        <div className="flex flex-col items-center justify h-screen  " >
+        <div className="flex flex-col items-center justify h-3/4 p-1  bg-lightPink-50 rounded-md" >
           <h1 className="text-2xl font-semibold mt-3 mb-8">
             {currentQuestion?.question} {currentQuestion?.id}
           </h1>

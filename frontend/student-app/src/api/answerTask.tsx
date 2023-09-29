@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import StartTaskFB from '../components/callStart';
 
 import AnswerAQ from './answerAQ';
 import GetNumeric from './getNumeric';
@@ -18,18 +17,18 @@ interface Task {
     wrong_answer: [];
 }
 
-interface Student {
-    id: number;
-    username: String;
-    email: String;
-    xp: number;
-    level: number;
-    correctly_answered_questions: [];
-    incorrectly_answered_questions: [];
-    questions_pased: [];
-    used_combinations: [];
-    task_count: number;
-}
+// interface Student {
+//     id: number;
+//     username: String;
+//     email: String;
+//     xp: number;
+//     level: number;
+//     correctly_answered_questions: [];
+//     incorrectly_answered_questions: [];
+//     questions_pased: [];
+//     used_combinations: [];
+//     task_count: number;
+// }
 
 interface Question {
     id: number;
@@ -40,18 +39,18 @@ interface Question {
     hint: string;
 }
 
-interface Alternative {
-    id: number;
-    alternative_question: number; //question id fk
-    answer: String;
-    is_correct: Boolean;
-}
+// interface Alternative {
+//     id: number;
+//     alternative_question: number; //question id fk
+//     answer: String;
+//     is_correct: Boolean;
+// }
 
-interface AlternativeQuestion {
-    id: number;
-    question: number; //question id fk
-    alternatives: [];
-}
+// interface AlternativeQuestion {
+//     id: number;
+//     question: number; //question id fk
+//     alternatives: [];
+// }
 
 const TASK_ENDPOINT =  'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/tasks/'
 const STUDENT_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero.vercel.app/students/'
@@ -59,15 +58,32 @@ const ALTERNATIVEQUESTION_ENDPOINT = 'https://pds-p2-g5-avendano-brito-guerriero
 
 
 function AnswerTask(){
-    const [task, setTask] = useState<Task | null>(null);
+  const [task, setTask] = useState<Task | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [student, setStudent] = useState<Student | null>(null);
-  const [alternativeQuestion, setAlternativeQuestion] = useState<AlternativeQuestion[]>([]);
+  // const [student, setStudent] = useState<Student | null>(null);
+  // const [alternativeQuestion, setAlternativeQuestion] = useState<AlternativeQuestion[]>([]);
   const { studentId } = useParams();
   const { taskId } = useParams();
 
   // Fetch task and student data
-  useEffect(() => {
+  // const getStudent = useCallback(() => {
+  //   fetch(STUDENT_ENDPOINT + studentId + '/', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-type': 'application/json; charset=UTF-8',
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data)
+  //       setStudent(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Fetch error:', error);
+  //     });
+  // }, [studentId]);
+
+  const getTask = useCallback(() => {
     fetch(`${TASK_ENDPOINT}${taskId}/`, {
       method: 'GET',
       headers: {
@@ -83,40 +99,39 @@ function AnswerTask(){
       .catch((error) => {
         console.error('Fetch error:', error);
       });
-
-    fetch(STUDENT_ENDPOINT + studentId + '/', {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        setStudent(data);
-      })
-      .catch((error) => {
-        console.error('Fetch error:', error);
-      });
-  }, [studentId, taskId]);
+  }, [taskId]);
 
   // Fetch alternative questions data
+  // const getAlternativeQ = useCallback(() => {
+  //   fetch(ALTERNATIVEQUESTION_ENDPOINT, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-type': 'application/json; charset=UTF-8',
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log('alternative questions', data);
+  //       setAlternativeQuestion(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error.message);
+  //     });
+
+  // }, [])
+
+  // useEffect(() => {
+  //   getAlternativeQ();
+  // }, [getAlternativeQ]);
+
   useEffect(() => {
-    fetch(ALTERNATIVEQUESTION_ENDPOINT, {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('alternative questions', data);
-        setAlternativeQuestion(data);
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
-  }, []);
+    getTask();
+  }, [getTask]);
+
+  // useEffect(() => {
+  //   getStudent();
+  // }, [getStudent]);
+    
 
 
 
@@ -137,7 +152,7 @@ function AnswerTask(){
          )}
         {task ? (
             <h6 className="text-lg text-white">
-              {task.difficulty === 'Easy' ? 'Dificultad: Fácil' : task.difficulty === 'Intermediant' ? 'Dificultad: Intermedio' : 'Dificultad: Difícil'}
+              {task.difficulty === 'Easy' ? 'Fácil' : task.difficulty === 'Medium' ? 'Intermedio' : 'Difícil'}
             </h6>
           ) : null}
       </nav>
