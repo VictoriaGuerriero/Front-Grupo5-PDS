@@ -14,6 +14,7 @@ import Mixto4ResTipo1 from '../diagrams/mixto4ResTipo1';
 import Mixto4ResTipo2 from '../diagrams/mixto4ResTipo2';
 import Level4 from '../diagrams/level4';
 import Level5 from '../diagrams/level5';
+import Level6 from '../diagrams/level6';
 // import ElectricCircuit from './adiagram';
 
 interface Question {
@@ -113,12 +114,14 @@ function GetNumeric(props: any) {
         }
       }, [currentNumeric]);
       
-
-    const commaRegex: RegExp = /,/;
-
-    if (currentNumeric?.answer !== undefined && commaRegex.test(currentNumeric.answer)) {
-        setListAnswer(currentNumeric.answer.split(','))
-    } 
+    
+    useEffect(() => {
+        const commaRegex: RegExp = /,/;
+        if (currentNumeric?.answer !== undefined && commaRegex.test(currentNumeric.answer)) {
+            setListAnswer(currentNumeric.answer.split(','))
+        }
+    },[currentNumeric?.answer])
+     
 
     const [studentAnswer, setStudentAnswer] = useState<string>('')
     const [variable1, setVariable1] = useState<string>('');
@@ -448,10 +451,13 @@ function GetNumeric(props: any) {
                 <Mixto4ResTipo2 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} r4={combination[6]}/>
             )}
             {circuitType === '5' && (
-                <Level4 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]}/>
+                <Level4 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} r4={combination[6]}/>
             )}
             {circuitType === '6' && (
                 <Level5 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} r4={combination[6]} r5={combination[7]} r6={combination[8]} r7={combination[9]} r8={combination[10]}/>
+            )}
+            {circuitType === '7' && (
+                <Level6 volt={volt} r1={combination[3]} r2={combination[4]} r3={combination[5]} c1={combination[7]} c2={combination[8]}></Level6>
             )}
             
 
